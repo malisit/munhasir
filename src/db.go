@@ -1,4 +1,4 @@
-package munhasir
+package main
 
 import (
 	"fmt"

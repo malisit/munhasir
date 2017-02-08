@@ -1,4 +1,4 @@
-package munhasir
+package main
 
 import (
 	"log"
@@ -15,6 +15,8 @@ func main() {
 
 	// route
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/login", loginHandler)
+	http.HandleFunc("/register", registerHandler)
 	http.Handle("/statics/",
 		http.StripPrefix("/statics/", http.FileServer(http.Dir("./statics"))),
 	)

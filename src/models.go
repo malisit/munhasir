@@ -1,28 +1,27 @@
-package munhasir
+package main
 
 import (
 	"time"
 )
 
 type Day struct {
-	Id             	int64   	`json:"id"`
-	DayDate    		time.Time   `json:"day_date"`
+	Id             	int64   	`bson:"id"`
+	DayDate    		time.Time   `bson:"day_date"`
 }
 
 type User struct {
-	Username 		string		`json:"username"`
-	Password		string 		`json:"password"`
-	Email 			string 		`json:"email"`
-	Datetime		time.Time 	`json:"registration_datetime"`
+	Username 		string		`bson:"username"`
+	Password		string 		`bson:"password"`
+	Datetime		time.Time 	`bson:"registration_datetime"`
 }
 
 type Entry struct {
-	User 			User		`json:"user"`
-	Day 			Day 		`json:"day"`
-	EncryptedText	string		`json:"encrypted_text"`
+	User 			User		`bson:"user"`
+	Day 			Day 		`bson:"day"`
+	EncryptedText	string		`bson:"encrypted_text"`
 }
 
 type KeyVIPair struct {		
-	KeyMd5			string 		`json:"keymd5"`
-	VI 				string 		`json:"vi"`
+	KeyMd5			string 		`bson:"keymd5"`
+	VI 				string 		`bson:"vi"`
 }
