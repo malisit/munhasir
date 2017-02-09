@@ -10,6 +10,7 @@ import (
 )
 
 var authenticated = false
+var loggedUser = User{}
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(authenticated)
@@ -109,7 +110,38 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	} else {
 		authenticated = true
+		loggedUser = result
 		http.Redirect(w, r, "/",  http.StatusMovedPermanently)
 	}
 
 }
+
+func postHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "POST" {
+		http.ServeFile(w, r, "templates/post.html")
+		return
+	}
+	uncryptedText := r.FormValue("text")
+	unhashedKey := r.FormValue("key")
+	user := loggedUser
+	createdAt := time.Now()
+
+	hashedKey := hash(unhashedKey)
+
+	encryptedText := encrypt(hashedKey, uncryptedText)
+
+	session := connect()
+	defer session.Close()
+
+	collection := session.DB("munhasir").C("entries")
+
+	newEntry := Entry{user, createdAt, encryptedText}
+	err := collection.Insert(newEntry)
+
+	if err != nil{
+		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
+		return
+	}
+	http.Redirect(w, r, "/list", http.StatusMovedPermanently)
+}
+

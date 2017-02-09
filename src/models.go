@@ -17,7 +17,7 @@ type User struct {
 
 type Entry struct {
 	User 			User		`bson:"user"`
-	Day 			Day 		`bson:"day"`
+	Day 			time.Time	`bson:"day"`
 	EncryptedText	string		`bson:"encrypted_text"`
 }
 
