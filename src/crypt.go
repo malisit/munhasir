@@ -10,6 +10,10 @@ import (
 	"fmt"
 )
 
+//
+// https://gist.github.com/manishtpatel/8222606
+//
+
 func hash(str string) []byte {
 	h := sha256.New()
 	io.WriteString(h, str)

@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	//"gopkg.in/mgo.v2/bson"
 )
 
 func main() {
@@ -13,11 +14,19 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
+	
 	// route
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/register", registerHandler)
-	http.HandleFunc("/post", postHandler)
+
+	if authenticated {
+		http.HandleFunc("/post", postHandler)
+		http.HandleFunc("/list", listHandler)
+		http.HandleFunc("/entry", entryHandler)
+
+	}
+	
 	http.Handle("/statics/",
 		http.StripPrefix("/statics/", http.FileServer(http.Dir("./statics"))),
 	)

@@ -73,7 +73,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	checkInternalServerError(err, w)
 
-	newUser := User{username, string(hashedPassword), createdAt}
+	newUser := User{Username:username, Password:string(hashedPassword), Datetime:createdAt}
 	err = collection.Insert(newUser)
 
 	if err != nil{
@@ -135,7 +135,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	collection := session.DB("munhasir").C("entries")
 
-	newEntry := Entry{user, createdAt, encryptedText}
+	newEntry := Entry{User:user, Day:createdAt, EncryptedText:encryptedText}
 	err := collection.Insert(newEntry)
 
 	if err != nil{
@@ -145,3 +145,31 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/list", http.StatusMovedPermanently)
 }
 
+
+func listHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, "Method is not allowed.", http.StatusBadRequest)
+	}
+
+	user := loggedUser
+
+	results := []Entry{}
+
+	session := connect()
+	defer session.Close()
+
+	collection := session.DB("munhasir").C("entries")
+	err := collection.Find(bson.M{"user":user}).All(&results)
+
+	if err != nil{
+		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Println(results)
+
+}
+
+func entryHandler(w http.ResponseWriter, r *http.Request) {
+	// decode and return entry via post
+}
