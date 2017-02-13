@@ -166,10 +166,36 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(results)
+	template, err := template.New("list.html").ParseFiles("templates/list.html")
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	err = template.Execute(w, results)
+
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 }
 
 func entryHandler(w http.ResponseWriter, r *http.Request) {
 	// decode and return entry via post
+	if r.Method != "POST" {
+		http.Redirect(w, r, "/list", http.StatusMovedPermanently)
+	}
+	encryptedText := r.FormValue("text")
+	unhashedKey := r.FormValue("key")
+
+	hashedKey := hash(unhashedKey)
+
+	decryptedText := decrypt(hashedKey, encryptedText)
+
+	fmt.Println(decryptedText)
+	//http.Redirect(w, r, "/list", http.StatusMovedPermanently)
+
+
 }
