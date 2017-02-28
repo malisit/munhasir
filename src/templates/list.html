@@ -1,6 +1,3 @@
-<h1>asd</h1>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-
 {{range $key, $value := .}}
 	{{$key}}
     {{$value.Id}}
@@ -10,35 +7,6 @@
     <form action="/entry" method="post" id='ff{{$key}}'>
 		Key: <input type="text" name="key"><br>
 		Text:  <textarea type="text" name="text" style="display:none;">{{.EncryptedText}}</textarea><br>
-		<input type="submit" name="Ok" value="OK" onclick="run{{$key}}()">
+		<input type="submit" name="Ok" value="OK">
 	</form>
-
-	<script type="text/javascript">
-		 /* Get from elements values */
-		 function run{{$key}}() {
-		 	// body...
-		
- 		var values = $('#ff{{$key}}').serialize();
-
-		 $.ajax({
-		        url: "test.php",
-		        type: "post",
-		        data: values ,
-		        success: function (response) {
-		        	console.log(response);
-		           // you will get response from your php page (what you echo or print)                 
-
-		        },
-		        error: function(jqXHR, textStatus, errorThrown) {
-		           console.log(textStatus, errorThrown);
-		        }
-
-
-		    });
-		  }
-	</script>
-
 {{end}}
-
-
-<h1>asd</h1>

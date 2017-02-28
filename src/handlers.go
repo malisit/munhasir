@@ -59,16 +59,16 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	collection := session.DB("munhasir").C("users")
 
 	result := User{}
-	
+
 	err := collection.Find(bson.M{"username":username}).Select(bson.M{"username":username}).One(&result)
-	
+
 	if err == nil{
 		http.Error(w, "already registered username", http.StatusInternalServerError)
 		return
 	}
 
 	createdAt := time.Now()
-	
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 
 	checkInternalServerError(err, w)
@@ -80,7 +80,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
 		return
 	}
-	http.Redirect(w, r, "/login", http.StatusMovedPermanently)	
+	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
 }
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -88,7 +88,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "templates/login.html")
 		return
 	}
-	
+
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 	result := User{}
@@ -186,16 +186,27 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	// decode and return entry via post
 	if r.Method != "POST" {
 		http.Redirect(w, r, "/list", http.StatusMovedPermanently)
+	} else {
+		encryptedText := r.FormValue("text")
+		unhashedKey := r.FormValue("key")
+		hashedKey := hash(unhashedKey)
+		decryptedText := decrypt(hashedKey, encryptedText)
+
+		result := make(map[string]string)
+		result["text"] = decryptedText
+
+		template, err := template.New("entry.html").ParseFiles("templates/entry.html")
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		err = template.Execute(w, result)
+
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
 	}
-	encryptedText := r.FormValue("text")
-	unhashedKey := r.FormValue("key")
-
-	hashedKey := hash(unhashedKey)
-
-	decryptedText := decrypt(hashedKey, encryptedText)
-
-	fmt.Println(decryptedText)
-	//http.Redirect(w, r, "/list", http.StatusMovedPermanently)
-
-
 }
