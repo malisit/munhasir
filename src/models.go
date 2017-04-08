@@ -33,3 +33,9 @@ type UserCredentials struct {
 	Username		string			`bson:"username" json:"username"`
 	Password		string			`bson:"password" json:"password"`
 }
+
+type TokenUserPair struct {
+	User			User			`bson:"user"`
+	Token			string			`bson:"token"`
+	Timestamp		time.Time		`bson:"timestamp"`
+}

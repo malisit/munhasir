@@ -16,6 +16,7 @@ var authenticated = false
 var loggedUser = User{}
 
 func denemeHandler(w http.ResponseWriter, r *http.Request) {
+	
 }
 
 
@@ -67,6 +68,17 @@ func newLoginHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		fmt.Fprintln(w, "Error while signing the token")
 		log.Printf("Error signing token: %v\n", err)
+	}
+
+	// create a user-token pair
+
+	collection = session.DB("munhasir").C("usertoken")
+	newPair := TokenUserPair{User:result, Token:tokenString, Timestamp: bson.Now()}
+	err = collection.Insert(newPair)
+
+	if err != nil{
+		http.Error(w, "everything is something happened: " + err.Error(), http.StatusBadRequest)
+		return
 	}
 
 	//create a token instance using the token string
@@ -211,11 +223,11 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func listHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "GET" {
-		http.Error(w, "Method is not allowed.", http.StatusBadRequest)
-	}
 
-	user := loggedUser
+	token := w.Header().Get("token")
+
+	// get user by token
+	user := getUserByToken(token)
 
 	results := []Entry{}
 
@@ -229,21 +241,9 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
 		return
 	}
-
-	template, err := template.New("list.html").ParseFiles("templates/list.html")
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	err = template.Execute(w, results)
-
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
+	fmt.Println(user)
+	fmt.Println(results)
+	JsonResponse(results, w)
 }
 
 func entryHandler(w http.ResponseWriter, r *http.Request) {

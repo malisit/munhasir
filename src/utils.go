@@ -4,11 +4,13 @@ import (
 	"net/http"
 	"crypto/rsa"
 	"io/ioutil"
+	"time"
 	"log"
 	"fmt"
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
+	"gopkg.in/mgo.v2/bson"
 )
 
 func checkInternalServerError(err error, w http.ResponseWriter) {
@@ -68,8 +70,8 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 
 
 	if err == nil {
-
 		if token.Valid{
+			w.Header().Set("token",token.Raw)
 			next(w, r)
 		} else {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -80,4 +82,22 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 		fmt.Fprint(w, "Unauthorised access to this resource")
 	}
 
+}
+
+func getUserByToken(token string) User {
+	result := TokenUserPair{}
+
+	session := connect()
+	defer session.Close()
+
+	end := bson.Now()
+	start := end.Add(-20*time.Minute)
+
+	collection := session.DB("munhasir").C("usertoken")
+	err := collection.Find(bson.M{"timestamp": bson.M{"$gte": start, "$lte": end}, "token":token}).One(&result)
+
+	if err != nil {
+		fmt.Println("there is no user token pair for given token")
+	}
+	return result.User
 }

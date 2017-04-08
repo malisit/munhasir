@@ -18,6 +18,7 @@ func main() {
 
 	// route
 	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/login2", loginHandler)
 	http.HandleFunc("/login", newLoginHandler)
 	http.HandleFunc("/register", registerHandler)
 	http.HandleFunc("/post", postHandler)
