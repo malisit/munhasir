@@ -39,3 +39,8 @@ type TokenUserPair struct {
 	Token			string			`bson:"token"`
 	Timestamp		time.Time		`bson:"timestamp"`
 }
+
+type EntryPost struct {
+	Text			string			`bson:"text"`
+	Key				string			`bson:"key"`
+}

@@ -18,15 +18,20 @@ func main() {
 
 	// route
 	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/login2", loginHandler)
-	http.HandleFunc("/login", newLoginHandler)
+	http.HandleFunc("/login", loginHandler)
 	http.HandleFunc("/register", registerHandler)
-	http.HandleFunc("/post", postHandler)
 	http.Handle("/list", negroni.New(
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(listHandler)),
 	))
-	http.HandleFunc("/entry", entryHandler)
+	http.Handle("/post", negroni.New(
+		negroni.HandlerFunc(ValidateTokenMiddleware),
+		negroni.Wrap(http.HandlerFunc(postHandler)),
+	))
+	http.Handle("/entry", negroni.New(
+		negroni.HandlerFunc(ValidateTokenMiddleware),
+		negroni.Wrap(http.HandlerFunc(entryHandler)),
+	))
 
 	http.Handle("/statics/",
 		http.StripPrefix("/statics/", http.FileServer(http.Dir("./statics"))),

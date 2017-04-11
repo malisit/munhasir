@@ -12,15 +12,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var authenticated = false
-var loggedUser = User{}
-
-func denemeHandler(w http.ResponseWriter, r *http.Request) {
-	
-}
-
-
-func newLoginHandler(w http.ResponseWriter, r *http.Request) {
+func loginHandler(w http.ResponseWriter, r *http.Request) {
 	var user UserCredentials
 
 	//decode request into UserCredentials struct
@@ -30,8 +22,6 @@ func newLoginHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Error in request")
 		return
 	}
-
-	fmt.Println(user)
 
 	session := connect()
 	defer session.Close()
@@ -81,14 +71,13 @@ func newLoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//create a token instance using the token string
+	// return token string
 	JsonResponse(tokenString, w)
 
 
 }
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println(authenticated)
 	if r.Method != "GET" {
 		http.Error(w, "Method is not allowed.", http.StatusBadRequest)
 	}
@@ -122,13 +111,22 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		http.ServeFile(w, r, "templates/register.html")
+		JsonResponse("wrong method", w)
 		return
 	}
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	fmt.Println("pass: ",password)
-	// password2 := r.FormValue("password2")
+	var user UserCredentials
+
+	//decode request into UserCredentials struct
+	err := json.NewDecoder(r.Body).Decode(&user)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}
+
+	username := user.Username
+	password := user.Password
+	
 	session := connect()
 	defer session.Close()
 
@@ -136,7 +134,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := User{}
 
-	err := collection.Find(bson.M{"username":username}).Select(bson.M{"username":username}).One(&result)
+	err = collection.Find(bson.M{"username":username}).Select(bson.M{"username":username}).One(&result)
 
 	if err == nil{
 		http.Error(w, "already registered username", http.StatusInternalServerError)
@@ -156,50 +154,31 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
 		return
 	}
-	http.Redirect(w, r, "/login", http.StatusMovedPermanently)
+	JsonResponse("success", w)
 }
 
-func loginHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.ServeFile(w, r, "templates/login.html")
-		return
-	}
 
-	username := r.FormValue("username")
-	password := r.FormValue("password")
-	result := User{}
-
-	session := connect()
-	defer session.Close()
-
-	collection := session.DB("munhasir").C("users")
-	err := collection.Find(bson.M{"username":username}).One(&result)
-	if err != nil{
-		http.Error(w, "user doesn't exist", http.StatusInternalServerError)
-		return
-	}
-
-	err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(password))
-
-	if err != nil {
-		http.Error(w, "password is not true", http.StatusInternalServerError)
-		return
-	} else {
-		authenticated = true
-		loggedUser = result
-		http.Redirect(w, r, "/",  http.StatusMovedPermanently)
-	}
-
-}
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != "POST" {
-		http.ServeFile(w, r, "templates/post.html")
+	var entry EntryPost
+
+	//decode request into UserCredentials struct
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
 		return
 	}
-	uncryptedText := r.FormValue("text")
-	unhashedKey := r.FormValue("key")
-	user := loggedUser
+
+
+	uncryptedText := entry.Text
+	unhashedKey := entry.Key
+
+	token := w.Header().Get("token")
+
+	// get user by token
+	user := getUserByToken(token)
+
 	createdAt := time.Now()
 
 	hashedKey := hash(unhashedKey)
@@ -212,13 +191,13 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	collection := session.DB("munhasir").C("entries")
 
 	newEntry := Entry{User:user, Day:createdAt, EncryptedText:encryptedText}
-	err := collection.Insert(newEntry)
+	err = collection.Insert(newEntry)
 
 	if err != nil{
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
 		return
 	}
-	http.Redirect(w, r, "/list", http.StatusMovedPermanently)
+	JsonResponse("success", w)
 }
 
 
@@ -241,36 +220,28 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
 		return
 	}
-	fmt.Println(user)
-	fmt.Println(results)
+	
 	JsonResponse(results, w)
 }
 
 func entryHandler(w http.ResponseWriter, r *http.Request) {
-	// decode and return entry via post
-	if r.Method != "POST" {
-		http.Redirect(w, r, "/list", http.StatusMovedPermanently)
-	} else {
-		encryptedText := r.FormValue("text")
-		unhashedKey := r.FormValue("key")
-		hashedKey := hash(unhashedKey)
-		decryptedText := decrypt(hashedKey, encryptedText)
+	var entry EntryPost
 
-		result := make(map[string]string)
-		result["text"] = decryptedText
-
-		template, err := template.New("entry.html").ParseFiles("templates/entry.html")
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
-
-		err = template.Execute(w, result)
-
-		if err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	//decode request into UserCredentials struct
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
 	}
+
+
+	encryptedText := entry.Text
+	unhashedKey := entry.Key
+
+	hashedKey := hash(unhashedKey)
+	decryptedText := decrypt(hashedKey, encryptedText)
+
+	JsonResponse(decryptedText, w)
+	
 }
