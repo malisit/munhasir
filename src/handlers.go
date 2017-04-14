@@ -126,7 +126,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	username := user.Username
 	password := user.Password
-	
+
 	session := connect()
 	defer session.Close()
 
@@ -137,7 +137,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	err = collection.Find(bson.M{"username":username}).Select(bson.M{"username":username}).One(&result)
 
 	if err == nil{
-		http.Error(w, "already registered username", http.StatusInternalServerError)
+		JsonResponse("already registered username", w)
 		return
 	}
 
@@ -151,7 +151,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	err = collection.Insert(newUser)
 
 	if err != nil{
-		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
+		JsonResponse("db error", w)
 		return
 	}
 	JsonResponse("success", w)
