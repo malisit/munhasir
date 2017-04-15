@@ -74,12 +74,12 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 			w.Header().Set("token",token.Raw)
 			next(w, r)
 		} else {
-			w.WriteHeader(http.StatusUnauthorized)
-			fmt.Fprint(w, "Token is not valid")
+			JsonResponse("this token is not a real token",w)
+			return
 		}
 	} else {
-		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Fprint(w, "Unauthorised access to this resource")
+		JsonResponse("this token is not authorized for this content",w)
+		return
 	}
 
 }

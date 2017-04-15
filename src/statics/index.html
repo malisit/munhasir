@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>munhasir </title>
+  
+  
+  <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+<div class="container">
+  <header class="page-header">
+    <div class="branding">
+      <h1>munhasir</h1>
+    </div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<template id="home-list">
+  <section>
+  <div class="actions">
+<!--     <router-link class="btn btn-default" :to="{path: '/add-product'}">
+      <span class="glyphicon glyphicon-plus"></span>
+      Add product
+    </router-link>
+    <router-link class="btn btn-default" :to="{path: '/register'}">
+      <span class="glyphicon glyphicon-plus"></span>
+      Register
+    </router-link> -->
+  </div>
+  <div class="filters row">
+    <div class="form-group col-sm-3">
+      <label for="search-element">Date</label>
+      <input v-model="searchKey" class="form-control" id="search-element" requred/>
+    </div>
+  </div>
+  
+  <table class="table">
+
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Date</th>
+      <th>Content</th>
+      <!-- <th class="col-sm-2">Actions</th> -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr v-for="product in data2">
+      <td>
+        <!-- <router-link :to="{name: 'product', params: {product_id: product.id}}">{{ product.name }}</router-link> -->
+        {{ product.Id }}
+      </td>
+      <td>{{ product.Day }}</td>
+      <td>
+        {{ product.EncryptedText }}
+      </td>
+      <!-- <td>
+        <router-link class="btn btn-warning btn-xs" :to="{name: 'product-edit', params: {product_id: product.id}}">Edit</router-link>
+        <router-link class="btn btn-danger btn-xs" :to="{name: 'product-delete', params: {product_id: product.id}}">Delete</router-link>
+      </td> -->
+    </tr>
+    </tbody>
+  </table>
+  </section>
+</template>
+
+
+<template id="register">
+    <section>
+  <h2 v-if="token === ''">Register</h2>
+  <form v-on:submit.prevent v-if="token === ''" v-on:submit="createUser">
+    
+    <div class="form-group">
+      <label for="add-username">Username</label>
+      <input id="add-username" class="form-control" v-model="user.username" required/>
+      <div v-if="err === 'alreadyuser'">
+        <br>
+        <div class="alert alert-danger">
+          username is taken. sorry about that. maybe try another one?
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="add-password">Password</label>
+      <input type="password" class="form-control" id="add-password" v-model="user.password" required/>
+      <div v-if="err === 'success'">
+        <br>
+        <div class="alert alert-success">
+          success, directing to login.
+        </div>
+      </div>
+    </div>
+    <button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Create</button>
+     <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+  </form>
+  <p v-if="token !== ''">You already logged in. You can go back to home page.</p>
+  <router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+</section>
+</template>
+
+<template id="login">
+    <section>
+  <h2 v-if="token === ''">Login</h2>
+  <form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
+    
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" class="form-control" v-model="user.username" required/>
+      <div v-if="err === 'doesn\'t exist'" > 
+      <br>
+      <div class="alert alert-warning">
+      username doesn't seem to be registered, sorry.
+      </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" class="form-control" id="password" v-model="user.password" required/>
+      <div v-if="err === 'incorrectpass'">
+        <br> 
+        <div class="alert alert-danger">
+          incorrect password
+        </div>
+      </div>
+      <div v-if="err === 'othererror'" >
+      <br>
+      <div class="alert alert-danger">
+      something unusual happened, please try again later.
+      </div>
+      </div>
+      
+      <div v-if="err === 'success'">
+        <br>
+        <div  class="alert alert-success">logged in, directing to your entries.</div>
+      </div>
+    </div>
+    <button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
+     <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+     <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
+  </form>
+  
+  <p v-if="token !== ''">You already logged in. You can go back to home page.</p>
+  <router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+</section>
+</template>
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
+<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+
+    <script src="main.js"></script>
+
+</body>
+</html>

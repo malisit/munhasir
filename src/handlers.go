@@ -29,14 +29,14 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	collection := session.DB("munhasir").C("users")
 	err = collection.Find(bson.M{"username":user.Username}).One(&result)
 	if err != nil{
-		http.Error(w, "user doesn't exist", http.StatusInternalServerError)
+		JsonResponse("user doesn't exist", w)
 		return
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(result.Password), []byte(user.Password))
 
 	if err != nil {
-		http.Error(w, "password is not true", http.StatusInternalServerError)
+		JsonResponse("password is not true", w)
 		return
 	}
 
@@ -108,6 +108,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+// func isTokenValid(w http.ResponseWriter, r *http.Request) {
+// 	JsonResponse("valid",w)
+// }
 
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {

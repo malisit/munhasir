@@ -17,25 +17,30 @@ func main() {
 	}
 
 	// route
-	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/login", loginHandler)
-	http.HandleFunc("/register", registerHandler)
-	http.Handle("/list", negroni.New(
+	http.Handle("/",
+		http.StripPrefix("", http.FileServer(http.Dir("./statics"))),
+	)
+	http.HandleFunc("/api/login", loginHandler)
+	http.HandleFunc("/api/register", registerHandler)
+	http.Handle("/api/list", negroni.New(
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(listHandler)),
 	))
-	http.Handle("/post", negroni.New(
+	http.Handle("/api/post", negroni.New(
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(postHandler)),
 	))
-	http.Handle("/entry", negroni.New(
+	http.Handle("/api/entry", negroni.New(
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(entryHandler)),
 	))
 
-	http.Handle("/statics/",
-		http.StripPrefix("/statics/", http.FileServer(http.Dir("./statics"))),
-	)
+	// http.Handle("/api/token", negroni.New(
+	// 	negroni.HandlerFunc(ValidateTokenMiddleware),
+	// 	negroni.Wrap(http.HandlerFunc(isTokenValid)),
+	// ))
+
+	
 
 	if err := http.ListenAndServe(":"+port, nil);err != nil {
 		log.Fatal("ListenAndServe: ", err)
