@@ -34,6 +34,10 @@ func main() {
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(entryHandler)),
 	))
+	http.Handle("/api/decrypt", negroni.New(
+		negroni.HandlerFunc(ValidateTokenMiddleware),
+		negroni.Wrap(http.HandlerFunc(decryptHandler)),
+	))
 
 	// http.Handle("/api/token", negroni.New(
 	// 	negroni.HandlerFunc(ValidateTokenMiddleware),

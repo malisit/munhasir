@@ -68,7 +68,6 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 	})
 
 
-
 	if err == nil {
 		if token.Valid{
 			w.Header().Set("token",token.Raw)
@@ -78,6 +77,7 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 			return
 		}
 	} else {
+
 		JsonResponse("this token is not authorized for this content",w)
 		return
 	}
@@ -100,4 +100,20 @@ func getUserByToken(token string) User {
 		fmt.Println("there is no user token pair for given token")
 	}
 	return result.User
+}
+
+func getEntryById(id string) Entry {
+	session := connect()
+	defer session.Close()
+
+	collection := session.DB("munhasir").C("entries")
+
+	result := Entry{}
+	err := collection.Find(bson.M{"_id":bson.ObjectIdHex(id)}).One(&result)
+
+	if err != nil{
+		return Entry{}
+	} else {
+		return result
+	}
 }

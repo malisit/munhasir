@@ -1,11 +1,57 @@
 
+var View = Vue.extend({
+  template: '#view',
+  data: function () {
+    return {
+        err: '',
+        isDisabled: false,
+        token: getCookie("token"),
+        content: '',
+        text: '',
+        decrypted: false,
+        err2: ''
+        // entryId: this.$route.query.entry_id
+    }
+  },
+  created: function () {
+    this.fetchData();
+  },
+  methods: {
+    fetchData: function() {
+      var json = {"text":this.$route.params.entry_id, "key":""}
+      
+      this.$http.post('/api/entry', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.content = response.body;
+        this.err2 = this.content.type
+        this.text = this.content.EncryptedText
+      })
+    },
+    decrypt: function() {
+      key = this.$refs[this.content.Id].value;
+      var json = {"text":this.content.EncryptedText, "key":key}
+      this.$http.post('/api/decrypt', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.text = response.body;
+      })
+    }
+  }
+})
+
 var Home = Vue.extend({
   template: '#home-list',
   data: function () {
     return {searchKey: '', data: [], key:'', text:''};
   },
   created: function () {
-
     this.fetchData();
   },
   methods : {
@@ -27,12 +73,6 @@ var Home = Vue.extend({
         }
         })
       },
-      deneme: function(txt,idoftxt){
-        console.log(txt)
-        console.log(this.$refs[idoftxt][0].value)
-        key = this.$refs[idoftxt][0].value;
-
-      }
   },
   computed : {
     data2: function () {
@@ -43,6 +83,8 @@ var Home = Vue.extend({
     }
   }
 });
+
+
 
 
 
@@ -225,6 +267,7 @@ const router = new VueRouter({
     {path: '/post', component: Post, name:'post'},
     {path: '/register', component: Register, name: 'register'},
     {path: '/login', component: Login, name: 'login'},
+    {path: '/view/:entry_id', component: View, name: 'view'},
   ]
 });
 

@@ -169,7 +169,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	//decode request into UserCredentials struct
 	err := json.NewDecoder(r.Body).Decode(&entry)
 	if err != nil {
-		JsonResponse("error in request",w)
+		JsonResponse("error in request", w)
 		return
 	}
 
@@ -238,7 +238,37 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	entryId := entry.Text
+	//unhashedKey := entry.Key
+	token := w.Header().Get("token")
 
+	usr:=getUserByToken(token)
+	ent := getEntryById(entryId)
+
+	if usr == ent.User {
+		JsonResponse(ent, w)
+	}
+	// hashedKey := hash(unhashedKey)
+	// decryptedText := decrypt(hashedKey, ent.EncryptedText)
+
+	// encryptedText := entry.Text
+	// unhashedKey := entry.Key
+
+	// hashedKey := hash(unhashedKey)
+	// decryptedText := decrypt(hashedKey, encryptedText)
+
+	
+	
+}
+
+func decryptHandler(w http.ResponseWriter, r *http.Request) {
+	var entry EntryPost
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}
 	encryptedText := entry.Text
 	unhashedKey := entry.Key
 
@@ -246,5 +276,4 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	decryptedText := decrypt(hashedKey, encryptedText)
 
 	JsonResponse(decryptedText, w)
-	
 }

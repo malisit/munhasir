@@ -43,40 +43,42 @@
 						</tr>
 					</thead>
 				</table>
-					<div v-for="entry in data2">
-
-						<div class="row">
-							<div class="col-md-2">{{ entry.Day }}</div>
-							<div class="col-md-7">
-								<div style="word-wrap: break-word;"><p>{{ entry.EncryptedText }}</p></div>
-								
-							</div>
-							<div class="col-md-3">
-								<label for="search-element">Key</label>
-								<input v-bind:ref="entry.Id" class="form-control" required/>
-								<br>
-								<label for="search-element">Decrypt</label>
-
-								<div>
-								<button class="btn btn-default" v-on:click="deneme(entry.EncryptedText,entry.Id)">
-									<span class="glyphicon glyphicon-plus"></span>
-									Edit
-								</button>  
-									
-								<router-link class="btn btn-default" :to="{name: 'post'}">
-									<span class="glyphicon glyphicon-plus"></span>
-									Read
-								</router-link>
-								</div>
+				<div v-for="entry in data2">
+					<div class="row">
+						<div class="col-md-2">{{ entry.Day }}</div>
+						<div class="col-md-7">
+							<div style="word-wrap: break-word;">
+								<p>{{ entry.EncryptedText }}</p>
 							</div>
 						</div>
-						<br>
+						<div class="col-md-3">
+							<label>View</label>
+							<br>
+							<router-link class="btn btn-default"  :to="{name: 'view', params: {entry_id: entry.Id}}">
+								<span class="glyphicon glyphicon-plus"></span>
+							</router-link>
+						</div>
 						<br>
 					</div>
-				
+					<br>
+					<br>
+				</div>
+				</div>
 			</section>
 		</template>
-
+		<template id="view">
+			<section>
+				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
+				<p v-if="token !== ''" v-if="err2 !== ''">{{text}}</p>
+				<br>
+				<label v-if="err2 !== ''" for="search-element">Key</label>
+				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
+				<br>
+				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Decrypt</button>
+				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+			</section>
+		</template>
 		<template id="register">
 			<section>
 				<h2 v-if="token === ''">Register</h2>
@@ -108,7 +110,6 @@
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
 			</section>
 		</template>
-
 		<template id="login">
 			<section>
 				<h2 v-if="token === ''">Login</h2>
@@ -151,7 +152,6 @@
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
 			</section>
 		</template>
-
 		<template id="post">
 			<section>
 				<h2 v-if="token !== ''">Post New Entry</h2>
@@ -187,8 +187,6 @@
 				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
 			</section>
 		</template>
-
-
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
 		<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
