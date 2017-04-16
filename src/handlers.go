@@ -169,8 +169,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	//decode request into UserCredentials struct
 	err := json.NewDecoder(r.Body).Decode(&entry)
 	if err != nil {
-		w.WriteHeader(http.StatusForbidden)
-		fmt.Fprintf(w, "Error in request")
+		JsonResponse("error in request",w)
 		return
 	}
 
@@ -198,7 +197,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	err = collection.Insert(newEntry)
 
 	if err != nil{
-		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
+		JsonResponse("db error",w)
 		return
 	}
 	JsonResponse("success", w)

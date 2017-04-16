@@ -2,7 +2,7 @@
 var Home = Vue.extend({
   template: '#home-list',
   data: function () {
-    return {searchKey: '', data: []};
+    return {searchKey: '', data: [], key:'', text:''};
   },
   created: function () {
 
@@ -26,6 +26,12 @@ var Home = Vue.extend({
           })
         }
         })
+      },
+      deneme: function(txt,idoftxt){
+        console.log(txt)
+        console.log(this.$refs[idoftxt][0].value)
+        key = this.$refs[idoftxt][0].value;
+
       }
   },
   computed : {
@@ -130,6 +136,48 @@ var Login = Vue.extend({
   }
 });
 
+
+var Post = Vue.extend({
+  template: '#post',
+  data: function () {
+    return {
+        post: {text: '', key: ''},
+        err: '',
+        isDisabled: false,
+        token: getCookie("token"),
+    }
+  },
+  methods: {
+    postEntry: function() {
+      var post = this.post;
+      var json = {"text": post.text, "key":post.key}
+      var res = "";
+      this.$http.post('/api/post', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        res = response.body;
+
+        if (res=="\"success\""){
+          this.err = "success"
+          this.isDisabled = true
+          setTimeout(function(){ 
+            router.push('/');  
+          }, 3000);
+          
+        } else {
+          this.err = "error"
+
+        }
+      })
+      
+      
+    }
+  }
+});
+
 var saveToLocalStorage = function(k,v){
   localStorage.setItem(k, v);
 }
@@ -174,6 +222,7 @@ function getCookie(cname) {
 const router = new VueRouter({
   routes: [
     {path: '/', component: Home, name:'home'},
+    {path: '/post', component: Post, name:'post'},
     {path: '/register', component: Register, name: 'register'},
     {path: '/login', component: Login, name: 'login'},
   ]
