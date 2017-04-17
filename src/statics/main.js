@@ -1,3 +1,36 @@
+var changePassword = Vue.extend({
+  template: '#change-password',
+  data: function(){
+    return {
+      token: getCookie("token"),
+      oldPassword1: '',
+      oldPassword2: '',
+      newPassword: '',
+      status: ''
+    }
+  },
+  methods: {
+    post: function(){
+      var json = {"text":this.oldPassword1, "key":this.newPassword}
+      this.$http.post('/api/user/password', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.status = response.body.substring(1,response.body.length-1);
+        console.log(this.status)
+        if (this.status == 'success') {
+          document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+          setTimeout(function(){ 
+            router.push('/login');  
+          }, 3000);
+        }
+      })
+    }
+  }
+})
+
 
 var View = Vue.extend({
   template: '#view',
@@ -20,7 +53,7 @@ var View = Vue.extend({
     fetchData: function() {
       var json = {"text":this.$route.params.entry_id, "key":""}
       
-      this.$http.post('/api/entry', json, {
+      this.$http.post('/api/entry/view', json, {
         headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+getCookie("token")
@@ -34,13 +67,13 @@ var View = Vue.extend({
     decrypt: function() {
       key = this.$refs[this.content.Id].value;
       var json = {"text":this.content.EncryptedText, "key":key}
-      this.$http.post('/api/decrypt', json, {
+      this.$http.post('/api/entry/decrypt', json, {
         headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        this.text = response.body;
+        this.text = response.body.substring(1,response.body.length-1);
       })
     }
   }
@@ -57,7 +90,7 @@ var Home = Vue.extend({
   methods : {
       fetchData: function () {
 
-        this.$http.get('/api/list', {headers: {'Content-Type':'application/json', 'Authorization': 'Bearer '+getCookie("token")}}).then(response => {
+        this.$http.get('/api/entry/list', {headers: {'Content-Type':'application/json', 'Authorization': 'Bearer '+getCookie("token")}}).then(response => {
 
         res = response.body;
         if (res == "\"this token is not authorized for this content\"") {
@@ -73,6 +106,11 @@ var Home = Vue.extend({
         }
         })
       },
+      logout: function(){
+        document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+        console.log("neettin")
+        router.push('/login');  
+      }
   },
   computed : {
     data2: function () {
@@ -104,7 +142,7 @@ var Register = Vue.extend({
       var user = this.user;
       var json = {"username": user.username, "password":user.password}
       var res = "";
-      this.$http.post('/api/register', json, {
+      this.$http.post('/api/user/register', json, {
         headers: {
         'Content-Type': 'application/json'
         }
@@ -129,6 +167,77 @@ var Register = Vue.extend({
   }
 });
 
+var Edit = Vue.extend({
+  template: '#edit',
+  data: function () {
+    return {
+        err: '',
+        isDisabled: false,
+        token: getCookie("token"),
+        content: '',
+        text: '',
+        decrypted: false,
+        err2: '',
+        status: ''
+        // entryId: this.$route.query.entry_id
+    }
+  },
+  created: function () {
+    this.fetchData();
+  },
+  methods: {
+    fetchData: function() {
+      var json = {"text":this.$route.params.entry_id, "key":""}
+      
+      this.$http.post('/api/entry/view', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.content = response.body;
+        this.err2 = this.content.type
+        this.text = this.content.EncryptedText
+      })
+    },
+    decrypt: function() {
+      key = this.$refs[this.content.Id].value;
+      var json = {"text":this.content.EncryptedText, "key":key}
+      this.$http.post('/api/entry/decrypt', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.text = response.body.substring(1,response.body.length-1);
+        this.decrypted = true
+      })
+    },
+
+    update: function(){
+      key = this.$refs[this.content.Id].value;
+      idof = this.content.Id
+      var json = {"text":this.text, "key":key, "idof":idof}
+      this.$http.post('/api/entry/edit', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        this.status = response.body.substring(1,response.body.length-1)
+
+        if (this.status == 'success') {
+          setTimeout(function(){ 
+            router.push({ name: 'view', params: { entry_id: idof }});  
+          }, 3000);
+        }
+      })
+
+    }
+  }
+})
+
+
 var Login = Vue.extend({
   template: '#login',
   data: function () {
@@ -145,7 +254,7 @@ var Login = Vue.extend({
       var user = this.user;
       var json = {"username": user.username, "password":user.password}
       var res = "";
-      this.$http.post('/api/login', json, {
+      this.$http.post('/api/user/login', json, {
         headers: {
         'Content-Type': 'application/json'
         }
@@ -194,7 +303,7 @@ var Post = Vue.extend({
       var post = this.post;
       var json = {"text": post.text, "key":post.key}
       var res = "";
-      this.$http.post('/api/post', json, {
+      this.$http.post('/api/entry/post', json, {
         headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer '+getCookie("token")
@@ -267,7 +376,9 @@ const router = new VueRouter({
     {path: '/post', component: Post, name:'post'},
     {path: '/register', component: Register, name: 'register'},
     {path: '/login', component: Login, name: 'login'},
+    {path: '/change-password', component: changePassword, name: 'change-password'},
     {path: '/view/:entry_id', component: View, name: 'view'},
+    {path: '/edit/:entry_id', component: Edit, name: 'edit'},
   ]
 });
 

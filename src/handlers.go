@@ -193,7 +193,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	collection := session.DB("munhasir").C("entries")
 
-	newEntry := Entry{User:user, Day:createdAt, EncryptedText:encryptedText}
+	newEntry := Entry{User:user, Day:createdAt, Updated:createdAt, EncryptedText:encryptedText}
 	err = collection.Insert(newEntry)
 
 	if err != nil{
@@ -217,7 +217,7 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 
 	collection := session.DB("munhasir").C("entries")
-	err := collection.Find(bson.M{"user":user}).All(&results)
+	err := collection.Find(bson.M{"user._id":user.Id}).Sort("-day").All(&results)
 
 	if err != nil{
 		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
@@ -245,7 +245,7 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	usr:=getUserByToken(token)
 	ent := getEntryById(entryId)
 
-	if usr == ent.User {
+	if usr.Id == ent.User.Id {
 		JsonResponse(ent, w)
 	}
 	// hashedKey := hash(unhashedKey)
@@ -276,4 +276,111 @@ func decryptHandler(w http.ResponseWriter, r *http.Request) {
 	decryptedText := decrypt(hashedKey, encryptedText)
 
 	JsonResponse(decryptedText, w)
+}
+
+
+// delete the entry with posted id
+// the user for the posted token should be same
+// with the one that's binded into entry
+func deleteHandler(w http.ResponseWriter, r *http.Request) {
+
+}
+
+// edit the entry with posted id
+// replace the content with posted content after encrypt
+// the user for the posted token should be same
+// with the one that's binded into entry
+func editHandler(w http.ResponseWriter, r *http.Request) {
+	var entry EntryEdit
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}	
+
+	newContent := entry.Text
+	entryId := entry.IdOfEntry
+	key := entry.Key
+
+	token := w.Header().Get("token")
+
+	usr := getUserByToken(token)
+	ent := getEntryById(entryId)
+
+	if usr.Id == ent.User.Id {
+		
+		getById := bson.M{"_id": bson.ObjectIdHex(entryId)}
+	
+		hashedKey := hash(key)
+
+		encryptedText := encrypt(hashedKey, newContent)
+
+		change := bson.M{"$set": bson.M{"encrypted_text": encryptedText, "updated": time.Now()}}
+
+		session := connect()
+		defer session.Close()
+
+		collection := session.DB("munhasir").C("entries")
+		err = collection.Update(getById, change)
+
+		if err != nil {
+			JsonResponse("everything is something happened", w)
+		} else {
+			JsonResponse("success", w)
+		}
+	}
+
+}
+
+
+// get the user by the token and change its password
+// with the posted password
+func changePassword(w http.ResponseWriter, r *http.Request) {
+	var entry EntryPost
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}	
+
+	token := w.Header().Get("token")
+	usr := getUserByToken(token)
+	oldpass := entry.Text
+	newpass := entry.Key
+
+	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(oldpass))
+
+	if err != nil {
+		JsonResponse("password is not true", w)
+		return
+	}
+
+
+	getById := bson.M{"_id": usr.Id}
+
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(newpass), bcrypt.DefaultCost)
+
+	checkInternalServerError(err, w)
+
+	change := bson.M{"$set": bson.M{"password": hashedPassword}}
+
+	session := connect()
+	defer session.Close()
+
+	collection := session.DB("munhasir").C("users")
+	err = collection.Update(getById, change)
+
+	if err != nil {
+		JsonResponse("everything is something happened", w)
+	} else {
+		JsonResponse("success", w)
+	}
+
+}
+
+// get the user by the token and delete the user 
+func deleteUser(w http.ResponseWriter, r *http.Request) {
+	
 }

@@ -23,10 +23,15 @@
 						<span class="glyphicon glyphicon-plus"></span>
 						New Entry
 					</router-link>
-					<router-link class="btn btn-default" :to="{name: 'home'}">
+					<router-link class="btn btn-default" :to="{name: 'change-password'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						Change Password
 					</router-link>
+					<button class="btn btn-default" v-on:click="logout">
+						<span class="glyphicon glyphicon-plus"></span>
+						Logout
+					</button>
+
 				</div>
 				<div class="filters row">
 					<div class="form-group col-sm-3">
@@ -74,7 +79,59 @@
 				<label v-if="err2 !== ''" for="search-element">Key</label>
 				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
 				<br>
-				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Decrypt</button>
+				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning">Decrypt</button>
+				<router-link class="btn btn-default"  :to="{name: 'edit', params: {entry_id: content.Id}}">Edit</router-link>
+				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+			</section>
+		</template>
+
+		<template id="change-password">
+			<section>
+				<h2 v-if="token !== ''">Change Password</h2>
+				
+				<label v-if="token !== ''" for="oldPassword1">Old Password</label>
+				<input v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
+				
+				<br>
+				
+				<label v-if="token !== ''" for="oldPassword2">Old Password<p style="color:grey;">(Again)</p></label>
+				<input v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
+				
+				<br>
+				<div  v-if="status !== 'success' && status !==''"  class="alert alert-danger">
+					{{status}}
+				</div>
+				<label v-if="token !== ''" for="newPassword">New Password</label>
+				<input v-if="token !== ''" class="form-control" v-model="newPassword" required/>
+				<br>
+
+				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-warning">Change</button>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Cancel</router-link>
+				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<br>
+				<br>
+				<div  v-if="status === 'success'"  class="alert alert-success">
+					success, please login with new password.
+				</div>
+				
+			</section>
+		</template>
+
+
+		<template id="edit">
+			<section>
+				<h2 v-if="token !== ''" v-if="err2 !== ''">Edit</h2>
+				<textarea  class="form-control" v-if="token !== ''" v-if="err2 !== ''" v-model="text">{{text}}</textarea>
+				<br>
+				<label v-if="err2 !== ''" for="search-element">Key</label>
+				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
+				<br>
+				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning">Decrypt</button>
+				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-warning">Update</button>
+				<div  v-if="status === 'success'"  class="alert alert-success">
+					success, directing to view.
+				</div>
 				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
 			</section>
