@@ -26,6 +26,10 @@ func main() {
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(changePassword)),
 	))
+	http.Handle("/api/user/delete", negroni.New(
+		negroni.HandlerFunc(ValidateTokenMiddleware),
+		negroni.Wrap(http.HandlerFunc(deleteUser)),
+	))
 	http.Handle("/api/entry/list", negroni.New(
 		negroni.HandlerFunc(ValidateTokenMiddleware),
 		negroni.Wrap(http.HandlerFunc(listHandler)),

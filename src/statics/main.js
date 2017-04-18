@@ -42,7 +42,8 @@ var View = Vue.extend({
         content: '',
         text: '',
         decrypted: false,
-        err2: ''
+        err2: '',
+        pass: ''
         // entryId: this.$route.query.entry_id
     }
   },
@@ -74,6 +75,73 @@ var View = Vue.extend({
         }
       }).then(response => {
         this.text = response.body.substring(1,response.body.length-1);
+      })
+    },
+    
+  }
+})
+
+var DeleteEntry = Vue.extend({
+  template: '#del-entry',
+  data: function() {
+    return {
+      pass: '',
+      token: getCookie("token"),
+      status: '',
+      entry_id: this.$route.params.entry_id
+    }
+  },
+  methods: {
+    run: function() {
+      var json = {"text":this.entry_id, "key":this.pass}
+      this.$http.post('/api/entry/delete', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        res = response.body.substring(1,response.body.length-1);
+        console.log(res)
+        if (res=='success') {
+          this.status = 'deleted'
+          setTimeout(function(){ 
+            router.push('/');  
+          }, 3000);
+        }
+      })
+    }
+  }
+})
+
+var DeleteUser = Vue.extend({
+  template: '#del-account',
+  data: function() {
+    return {
+      pass: '',
+      token: getCookie("token"),
+      status: '',
+      err: ''
+    }
+  },
+  methods: {
+    run: function() {
+      var json = {"text":this.pass, "key":this.pass}
+      this.$http.post('/api/user/delete', json, {
+        headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer '+getCookie("token")
+        }
+      }).then(response => {
+        res = response.body.substring(1,response.body.length-1);
+        if (res=='success') {
+          this.status = 'deleted'
+          document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+          setTimeout(function(){ 
+            router.push('/');  
+          }, 3000);
+        } else {
+          this.status = res
+        }
       })
     }
   }
@@ -108,7 +176,6 @@ var Home = Vue.extend({
       },
       logout: function(){
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-        console.log("neettin")
         router.push('/login');  
       }
   },
@@ -273,6 +340,12 @@ var Login = Vue.extend({
           this.err = "success";
           
           document.cookie = "token=" + res.substring(1, res.length-1);
+
+          // TODO:
+          // need to implement expiration date for cookie
+          // document.cookie = "token=" + res.substring(1, res.length-1) + "; expires=" + date +  "";
+
+
           //saveToLocalStorage("Token",res.substring(1, res.length-1));
           
           this.isDisabled= false;
@@ -379,6 +452,8 @@ const router = new VueRouter({
     {path: '/change-password', component: changePassword, name: 'change-password'},
     {path: '/view/:entry_id', component: View, name: 'view'},
     {path: '/edit/:entry_id', component: Edit, name: 'edit'},
+    {path: '/delete/:entry_id', component: DeleteEntry, name: 'del-entry'},
+    {path: '/delete', component: DeleteUser, name: 'del-account'},
   ]
 });
 

@@ -25,11 +25,6 @@ type Entry struct {
 	EncryptedText		string			`bson:"encrypted_text"`
 }
 
-type KeyVIPair struct {
-	KeyMd5			string			`bson:"keymd5"`
-	VI			string			`bson:"vi"`
-}
-
 type UserCredentials struct {
 	Username		string			`bson:"username" json:"username"`
 	Password		string			`bson:"password" json:"password"`

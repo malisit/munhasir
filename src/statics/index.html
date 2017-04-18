@@ -31,6 +31,10 @@
 						<span class="glyphicon glyphicon-plus"></span>
 						Logout
 					</button>
+					<router-link class="btn btn-default" :to="{name: 'del-account'}">
+						<span class="glyphicon glyphicon-plus"></span>
+						Delete Your Account
+					</router-link>
 
 				</div>
 				<div class="filters row">
@@ -80,9 +84,54 @@
 				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
 				<br>
 				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning">Decrypt</button>
+				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-warning" :to="{name: 'del-entry', params: {entry_id: content.Id}}">Delete</router-link>
 				<router-link class="btn btn-default"  :to="{name: 'edit', params: {entry_id: content.Id}}">Edit</router-link>
+				
 				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				
+			</section>
+		</template>
+
+		<template id="del-entry">
+			<section>
+				<h2 v-if="token !== ''">Entry Delete</h2>
+				<label v-if="token !== ''">Password</label>
+				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
+				<br>
+				<button v-on:click="run" v-if="token !== ''" class="btn btn-warning">Delete</button>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'view', params: {entry_id: entry_id}}">Cancel</router-link>
+				<p v-if="token === ''">Invalid page, go back to Home?</p>
+				<router-link class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<br>
+				<div  v-if="status === 'deleted'"  class="alert alert-success">
+					success, directing to list.
+				</div>
+			</section>
+		</template>
+
+		<template id="del-account">
+			<section>
+				<h2 v-if="token !== ''">Account Delete</h2>
+				<label v-if="token !== ''">Password</label>
+				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
+				<br>
+				<div class="alert alert-warning">
+					are you sure? we won't ask again!
+				</div>
+				<br>
+				<button v-on:click="run" v-if="token !== ''" class="btn btn-warning">Delete</button>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Cancel</router-link>
+				<p v-if="token === ''">Invalid page, go back to Home?</p>
+				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<br>
+				<br>
+				<div  v-if="status === 'deleted'"  class="alert alert-success">
+					success, you are no longer a member.
+				</div>
+				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
+					{{status}}
+				</div>
 			</section>
 		</template>
 
@@ -91,19 +140,19 @@
 				<h2 v-if="token !== ''">Change Password</h2>
 				
 				<label v-if="token !== ''" for="oldPassword1">Old Password</label>
-				<input v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
+				<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
 				
 				<br>
 				
 				<label v-if="token !== ''" for="oldPassword2">Old Password<p style="color:grey;">(Again)</p></label>
-				<input v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
+				<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
 				
 				<br>
 				<div  v-if="status !== 'success' && status !==''"  class="alert alert-danger">
 					{{status}}
 				</div>
 				<label v-if="token !== ''" for="newPassword">New Password</label>
-				<input v-if="token !== ''" class="form-control" v-model="newPassword" required/>
+				<input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
 				<br>
 
 				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-warning">Change</button>
@@ -129,11 +178,11 @@
 				<br>
 				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-warning">Decrypt</button>
 				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-warning">Update</button>
+				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
 				<div  v-if="status === 'success'"  class="alert alert-success">
 					success, directing to view.
 				</div>
-				<p v-if="err2 === ''">Invalid page, go back to Home?</p>
-				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
 			</section>
 		</template>
 		<template id="register">

@@ -283,7 +283,44 @@ func decryptHandler(w http.ResponseWriter, r *http.Request) {
 // the user for the posted token should be same
 // with the one that's binded into entry
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
+	var entry EntryPost
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}	
 
+	entryId := entry.Text
+	pass := entry.Key
+
+	token := w.Header().Get("token")
+
+	ent := getEntryById(entryId)
+	usr := getUserByToken(token)
+
+	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(pass))
+
+	if err != nil {
+		JsonResponse("password is not true", w)
+		return
+	}
+
+	if usr.Id == ent.User.Id {
+		getById := bson.M{"_id": bson.ObjectIdHex(entryId)}
+
+		session := connect()
+		defer session.Close()
+
+		collection := session.DB("munhasir").C("entries")
+		err = collection.Remove(getById)
+
+		if err != nil {
+			JsonResponse("everything is something happened", w)
+		} else {
+			JsonResponse("success", w)
+		}
+	}
 }
 
 // edit the entry with posted id
@@ -310,7 +347,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 	if usr.Id == ent.User.Id {
 		
-		getById := bson.M{"_id": bson.ObjectIdHex(entryId)}
+		getById := bson.M{"_id": ent.Id}
 	
 		hashedKey := hash(key)
 
@@ -382,5 +419,36 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 // get the user by the token and delete the user 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	
+	var entry EntryPost
+	err := json.NewDecoder(r.Body).Decode(&entry)
+	if err != nil {
+		w.WriteHeader(http.StatusForbidden)
+		fmt.Fprintf(w, "Error in request")
+		return
+	}	
+
+	token := w.Header().Get("token")
+	usr := getUserByToken(token)
+	pass := entry.Text
+	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(pass))
+
+	if err != nil {
+		JsonResponse("password is not true", w)
+		return
+	}
+
+
+	getById := bson.M{"_id": usr.Id}
+
+	session := connect()
+	defer session.Close()
+
+	collection := session.DB("munhasir").C("users")
+	err = collection.Remove(getById)
+
+	if err != nil {
+		JsonResponse("everything is something happened", w)
+	} else {
+		JsonResponse("success", w)
+	}
 }
