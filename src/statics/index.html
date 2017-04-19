@@ -4,7 +4,7 @@
 		<meta charset="UTF-8">
 		<title>munhasir </title>
 		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
-		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap-theme.min.css'>
+		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
 		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
@@ -19,19 +19,19 @@
 		<template id="home-list">
 			<section>
 				<div class="actions">
-					<router-link class="btn btn-default" :to="{name: 'post'}">
+					<router-link class="btn btn-primary" :to="{name: 'post'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						New Entry
 					</router-link>
-					<router-link class="btn btn-default" :to="{name: 'change-password'}">
+					<router-link class="btn btn-primary" :to="{name: 'change-password'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						Change Password
 					</router-link>
-					<button class="btn btn-default" v-on:click="logout">
+					<button class="btn btn-primary" v-on:click="logout">
 						<span class="glyphicon glyphicon-plus"></span>
 						Logout
 					</button>
-					<router-link class="btn btn-default" :to="{name: 'del-account'}">
+					<router-link class="btn btn-primary" :to="{name: 'del-account'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						Delete Your Account
 					</router-link>
@@ -138,21 +138,22 @@
 		<template id="change-password">
 			<section>
 				<h2 v-if="token !== ''">Change Password</h2>
-				
-				<label v-if="token !== ''" for="oldPassword1">Old Password</label>
-				<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
+				<div class="form-group" v-bind:class="{'has-error':(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||(status !== 'success' && status !=='')}">
+					<label v-if="token !== ''" for="oldPassword1">Old Password</label>
+					<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
 				
 				<br>
-				
 				<label v-if="token !== ''" for="oldPassword2">Old Password<p style="color:grey;">(Again)</p></label>
 				<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
 				
 				<br>
-				<div  v-if="status !== 'success' && status !==''"  class="alert alert-danger">
-					{{status}}
+				<div class="alert alert-danger" v-if="(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||((status !== 'success' && status !=='')&&oldPasswordTemp===oldPassword1)">
+				<span v-if="oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!=='')">passwords do not match</span><span v-if="(status !== 'success' && status !=='')&&(oldPasswordTemp===oldPassword1)"> {{status}}</span> </div>
 				</div>
+				<div class="form-group">
 				<label v-if="token !== ''" for="newPassword">New Password</label>
 				<input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
+				</div>
 				<br>
 
 				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-warning">Change</button>
@@ -220,17 +221,17 @@
 			<section>
 				<h2 v-if="token === ''">Login</h2>
 				<form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
-					<div class="form-group">
+					<div class="form-group" v-bind:class="userhas_error">
 						<label for="username">Username</label>
 						<input id="username" class="form-control" v-model="user.username" required/>
 						<div v-if="err === 'doesn\'t exist'" >
 							<br>
-							<div class="alert alert-warning">
+							<div class="alert alert-danger">
 								username doesn't seem to be registered, sorry.
 							</div>
 						</div>
 					</div>
-					<div class="form-group">
+					<div class="form-group" v-bind:class="passhas_error">
 						<label for="password">Password</label>
 						<input type="password" class="form-control" id="password" v-model="user.password" required/>
 						<div v-if="err === 'incorrectpass'">
@@ -239,11 +240,13 @@
 								incorrect password
 							</div>
 						</div>
-						<div v-if="err === 'othererror'" >
-							<br>
-							<div class="alert alert-danger">
-								something unusual happened, please try again later.
-							</div>
+					</div>
+					<div class="form-group">
+					<div v-if="err === 'othererror'" >
+						<br>
+						<div class="alert alert-danger">
+							something unusual happened, please try again later.
+						</div>
 						</div>
 						<div v-if="err === 'success'">
 							<br>

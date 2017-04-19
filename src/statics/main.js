@@ -5,6 +5,7 @@ var changePassword = Vue.extend({
       token: getCookie("token"),
       oldPassword1: '',
       oldPassword2: '',
+      oldPasswordTemp: '',
       newPassword: '',
       status: ''
     }
@@ -12,6 +13,7 @@ var changePassword = Vue.extend({
   methods: {
     post: function(){
       var json = {"text":this.oldPassword1, "key":this.newPassword}
+      
       this.$http.post('/api/user/password', json, {
         headers: {
         'Content-Type': 'application/json',
@@ -19,8 +21,9 @@ var changePassword = Vue.extend({
         }
       }).then(response => {
         this.status = response.body.substring(1,response.body.length-1);
-        console.log(this.status)
+        this.oldPasswordTemp = this.oldPassword1;
         if (this.status == 'success') {
+
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           setTimeout(function(){ 
             router.push('/login');  
@@ -313,6 +316,8 @@ var Login = Vue.extend({
         err: '',
         isDisabled: false,
         token: getCookie("token"),//getFromLocalStorage("Token")
+        userhas_error: {'has-error': false},
+        passhas_error: {'has-error': false},
 
     }
   },
@@ -330,14 +335,19 @@ var Login = Vue.extend({
 
         if (res=="\"user doesn't exist\""){
           this.err = "doesn't exist";
+          this.userhas_error['has-error'] = true
         } else if (res=="\"password is not true\""){
           this.err = "incorrectpass";
-
+          this.passhas_error['has-error'] = true
         } else if (res.substring(0, 10)=="\"Error while".substring(0, 10) || res.substring(0, 10) == "\"everything is ".substring(0, 10)){
           this.err = "othererr";
+          this.userhas_error['has-error'] = true
+          this.passhas_error['has-error'] = true
 
         } else {
           this.err = "success";
+          this.userhas_error['has-error'] = false
+          this.passhas_error['has-error'] = false
           
           document.cookie = "token=" + res.substring(1, res.length-1);
 
