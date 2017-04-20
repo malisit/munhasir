@@ -177,6 +177,14 @@ var Home = Vue.extend({
         }
         })
       },
+      formatDateTime: function(datetime) {
+          d = new Date(datetime)
+  
+  var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+    d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
+
+  return datestring;
+      },
       logout: function(){
         document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
         router.push('/login');  
@@ -186,7 +194,7 @@ var Home = Vue.extend({
     data2: function () {
       var self = this;
       return self.data.filter(function (product) {
-        return product.Day.indexOf(self.searchKey) !== -1
+        return self.formatDateTime(product.Day).indexOf(self.searchKey) !== -1
       })
     }
   }
@@ -204,6 +212,8 @@ var Register = Vue.extend({
         err: '',
         isDisabled: false,
         token: getCookie("token"),
+        oldUsername: '',
+        has_error: false,
 
     }
   },
@@ -218,7 +228,7 @@ var Register = Vue.extend({
         }
       }).then(response => {
         res = response.body;
-
+        this.oldUsername = json.username;
         if (res=="\"success\""){
           this.err = "success"
           this.isDisabled = true
@@ -227,6 +237,7 @@ var Register = Vue.extend({
           }, 3000);
           
         } else if (res=="\"already registered username\""){
+          this.has_error = true;
           this.err = "alreadyuser"
 
         }
@@ -438,6 +449,7 @@ function getCookie(cname) {
     }
     return '';
 }
+
 
 // var isTokenValid = function(){
 //   token = "Bearer " + getFromLocalStorage("Token");
