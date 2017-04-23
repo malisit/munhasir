@@ -3,9 +3,9 @@
 	<head>
 		<meta charset="UTF-8">
 		<title>munhasir </title>
-		<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'>
 		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
-		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.css">
+      <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
 	</head>
 	<body>
 		<div class="container">
@@ -64,7 +64,7 @@
 							<label>View</label>
 							<br>
 							<router-link class="btn btn-primary"  :to="{name: 'view', params: {entry_id: entry.Id}}">
-								<span class="glyphicon glyphicon-menu-right"></span>
+								<span class="glyphicon glyphicon-eye-close"></span>
 							</router-link>
 						</div>
 						<br>
@@ -75,15 +75,16 @@
 				</div>
 			</section>
 		</template>
-		<template id="view">
+		<!-- <template id="view">
 			<section>
 				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
-				<p v-if="token !== ''" v-if="err2 !== ''">{{text}}</p>
+				
+				<div v-if="token !== ''" v-if="err2 !== ''" v-html="text"></div>
 				<br>
 				<label v-if="err2 !== ''" for="search-element">Key</label>
 				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
 				<br>
-				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-compressed"></span> Decrypt</button>
+				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
 				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
 				<router-link class="btn btn-primary"  :to="{name: 'edit', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-edit"></span> Edit</router-link>
 				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'home'}"><span class="glyphicon glyphicon-home"></span> Home</router-link>
@@ -94,7 +95,7 @@
 				
 				
 			</section>
-		</template>
+		</template> -->
 
 		<template id="del-entry">
 			<section>
@@ -174,10 +175,12 @@
 		</template>
 
 
-		<template id="edit">
+		<template id="view">
 			<section>
+
 				<h2 v-if="token !== ''" v-if="err2 !== ''">Edit</h2>
-				<textarea  class="form-control" v-if="token !== ''" v-if="err2 !== ''" v-model="text">{{text}}</textarea>
+				
+				<editor :model.sync="text">qwe</editor>
 				<br>
 				<label v-if="err2 !== ''" for="search-element">Key</label>
 				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
@@ -273,19 +276,15 @@
 			<section>
 				<h2 v-if="token !== ''">Post New Entry</h2>
 				<form v-on:submit.prevent v-if="token !== ''" v-on:submit="postEntry">
+
 					<div class="form-group">
 						<label for="text">Text</label>
-						<textarea id="text" class="form-control" v-model="post.text" required></textarea>
+						<editor :model.sync="text"></editor>		
 					</div>
+					{{text}}
 					<div class="form-group">
 						<label for="key">Key</label>
-						<input class="form-control" id="key" v-model="post.key" required/>
-						<div v-if="err === 'incorrectpass'">
-							<br> 
-							<div class="alert alert-danger">
-								incorrect password
-							</div>
-						</div>
+						<input class="form-control" id="key" v-model="key" required/>
 						<div>
 							<br>
 							<div class="alert alert-warning">
@@ -304,9 +303,13 @@
 				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
 			</section>
 		</template>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
 		<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
 		<script src="main.js"></script>
+
 	</body>
 </html>

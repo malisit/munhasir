@@ -48,16 +48,19 @@ func initRSAKeys(){
 }
 
 func JsonResponse(response interface{}, w http.ResponseWriter) {
+	w.Header()["Content-Type"] = []string{"application/json"}
+	enc := json.NewEncoder(w)
+	enc.SetEscapeHTML(false)
 
-	json, err :=  json.Marshal(response)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// if err != nil {
+	// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+	// 	return
+	// }
 
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(json)
+	
+	
+	enc.Encode(response)
 }
 
 func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
@@ -77,7 +80,6 @@ func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.H
 			return
 		}
 	} else {
-
 		JsonResponse("this token is not authorized for this content",w)
 		return
 	}

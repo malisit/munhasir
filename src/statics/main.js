@@ -35,54 +35,155 @@ var changePassword = Vue.extend({
 })
 
 
-var View = Vue.extend({
-  template: '#view',
-  data: function () {
-    return {
-        err: '',
-        isDisabled: false,
-        token: getCookie("token"),
-        content: '',
-        text: '',
-        decrypted: false,
-        err2: '',
-        pass: ''
-        // entryId: this.$route.query.entry_id
-    }
-  },
-  created: function () {
-    this.fetchData();
-  },
-  methods: {
-    fetchData: function() {
-      var json = {"text":this.$route.params.entry_id, "key":""}
+var summernoteComponent = {
+    replace: true,
+    inherit: false,
+    template: "<textarea class='form-control' :name='name'></textarea>",
+    props: {
+        model: {
+            required: true,
+            twoWay: true
+        },
+        language: {
+            type: String,
+            required: false,
+            default: "en-US"
+        },
+        height: {
+            type: Number,
+            required: false,
+            default: 160
+        },
+        minHeight: {
+            type: Number,
+            required: false,
+            default: 160
+        },
+        maxHeight: {
+            type: Number,
+            required: false,
+            default: 800
+        },
+        name: {
+            type: String,
+            required: false,
+            default: ""
+        },
+        toolbar: {
+            type: Array,
+            required: false,
+            default: function() {
+                return [
+                    ["font", ["font","bold", "italic", "underline", "clear"]],
+                    ["style", ["fontname","strikethrough", "superscript", "subscript"]],
+                    ["fontsize", ["fontsize"]],
+                    ["para", ["ul", "ol", "paragraph"]],
+                    ["insert", ["link", "hr"]],
+                    ['height', ['height','codeview']]
+                ];
+            }
+        }
+    },
+    created: function() {
+        this.isChanging = false;
+        this.control = null;
+    },
+    mounted: function() {
+        //  initialize the summernote
+        if (this.minHeight > this.height) {
+            this.minHeight = this.height;
+        }
+        if (this.maxHeight < this.height) {
+            this.maxHeight = this.height;
+        }
+        var me = this;
+        this.control = $(this.$el);
+        this.control.summernote({
+            lang: this.language,
+            height: this.height,
+            minHeight: this.minHeight,
+            maxHeight: this.maxHeight,
+            toolbar: this.toolbar,
+            callbacks: {
+                onInit: function() {
+                    me.control.summernote("code", me.model);
+                },
+                onChange: function() {
+                    if (!me.isChanging) {
+                        me.isChanging = true;
+                        var code = me.control.summernote("code");
+                        me.model = (code === null || code.length === 0 ? null : code);
+                        me.$nextTick(function() {
+                            me.isChanging = false;
+                        });
+                    }
+                    me.$parent.text = code
+
+                }
+            }
+        })
+    },
+    watch: {
+        'model': function(val) {
+            if (!this.isChanging) {
+                
+                this.isChanging = true;
+                var code = (val === null ? "" : val);
+                this.control.summernote("code", code);
+                this.isChanging = false;
+            }
+        }
+    },
+}
+
+// var View = Vue.extend({
+//   template: '#view',
+//   data: function () {
+//     return {
+//         err: '',
+//         isDisabled: false,
+//         token: getCookie("token"),
+//         content: '',
+//         text: '',
+//         decrypted: false,
+//         err2: '',
+//         pass: ''
+//         // entryId: this.$route.query.entry_id
+//     }
+//   },
+//   created: function () {
+//     this.fetchData();
+//   },
+//   methods: {
+//     fetchData: function() {
+//       var json = {"text":this.$route.params.entry_id, "key":""}
       
-      this.$http.post('/api/entry/view', json, {
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+getCookie("token")
-        }
-      }).then(response => {
-        this.content = response.body;
-        this.err2 = this.content.type
-        this.text = this.content.EncryptedText
-      })
-    },
-    decrypt: function() {
-      key = this.$refs[this.content.Id].value;
-      var json = {"text":this.content.EncryptedText, "key":key}
-      this.$http.post('/api/entry/decrypt', json, {
-        headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer '+getCookie("token")
-        }
-      }).then(response => {
-        this.text = response.body.substring(1,response.body.length-1);
-      })
-    },
+//       this.$http.post('/api/entry/view', json, {
+//         headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer '+getCookie("token")
+//         }
+//       }).then(response => {
+//         this.content = response.body;
+//         this.err2 = this.content.type
+//         this.text = this.content.EncryptedText
+//       })
+//     },
+//     decrypt: function() {
+//       key = this.$refs[this.content.Id].value;
+//       var json = {"text":this.content.EncryptedText, "key":key}
+//       this.$http.post('/api/entry/decrypt', json, {
+//         headers: {
+//         'Content-Type': 'application/json',
+//         'Authorization': 'Bearer '+getCookie("token")
+//         }
+//       }).then(response => {
+//         this.text = response.body.substring(1,response.body.length-1);
+//       })
+//     },
     
-  }
-})
+//   }
+// })
 
 var DeleteEntry = Vue.extend({
   template: '#del-entry',
@@ -160,12 +261,12 @@ var Home = Vue.extend({
   },
   methods : {
       fetchData: function () {
-
         this.$http.get('/api/entry/list', {headers: {'Content-Type':'application/json', 'Authorization': 'Bearer '+getCookie("token")}}).then(response => {
 
         res = response.body;
-        if (res == "\"this token is not authorized for this content\"") {
-
+        console.log(res)
+        if (res == "this token is not authorized for this content") {
+          
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
           router.push('/login');  
 
@@ -248,8 +349,9 @@ var Register = Vue.extend({
   }
 });
 
-var Edit = Vue.extend({
-  template: '#edit',
+
+var View = Vue.extend({
+  template: '#view',
   data: function () {
     return {
         err: '',
@@ -263,6 +365,9 @@ var Edit = Vue.extend({
         // entryId: this.$route.query.entry_id
     }
   },
+  components: {
+        editor: summernoteComponent
+    },
   created: function () {
     this.fetchData();
   },
@@ -290,8 +395,13 @@ var Edit = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        this.text = response.body.substring(1,response.body.length-1);
+        console.log(response)
+        this.text = response.body;
         this.decrypted = true
+        var markupStr = $('#summerasdnote').summernote('code');
+        console.log(markupStr)
+
+
       })
     },
 
@@ -343,14 +453,13 @@ var Login = Vue.extend({
         }
       }).then(response => {
         res = response.body;
-
-        if (res=="\"user doesn't exist\""){
+        if (res=="user doesn't exist"){
           this.err = "doesn't exist";
           this.userhas_error['has-error'] = true
-        } else if (res=="\"password is not true\""){
+        } else if (res=="password is not true"){
           this.err = "incorrectpass";
           this.passhas_error['has-error'] = true
-        } else if (res.substring(0, 10)=="\"Error while".substring(0, 10) || res.substring(0, 10) == "\"everything is ".substring(0, 10)){
+        } else if (res=="Error while".substring(0, 10) || res.substring(0, 10) == "everything is ".substring(0, 10)){
           this.err = "othererr";
           this.userhas_error['has-error'] = true
           this.passhas_error['has-error'] = true
@@ -360,7 +469,7 @@ var Login = Vue.extend({
           this.userhas_error['has-error'] = false
           this.passhas_error['has-error'] = false
           
-          document.cookie = "token=" + res.substring(1, res.length-1);
+          document.cookie = "token=" + res;
 
           // TODO:
           // need to implement expiration date for cookie
@@ -382,6 +491,7 @@ var Login = Vue.extend({
 });
 
 
+
 var Post = Vue.extend({
   template: '#post',
   data: function () {
@@ -389,13 +499,18 @@ var Post = Vue.extend({
         post: {text: '', key: ''},
         err: '',
         isDisabled: false,
+        text: '',
+        key: '',
         token: getCookie("token"),
     }
   },
+  components: {
+        editor: summernoteComponent
+    },
   methods: {
     postEntry: function() {
       var post = this.post;
-      var json = {"text": post.text, "key":post.key}
+      var json = {"text": this.text, "key":this.key}
       var res = "";
       this.$http.post('/api/entry/post', json, {
         headers: {
@@ -473,7 +588,7 @@ const router = new VueRouter({
     {path: '/login', component: Login, name: 'login'},
     {path: '/change-password', component: changePassword, name: 'change-password'},
     {path: '/view/:entry_id', component: View, name: 'view'},
-    {path: '/edit/:entry_id', component: Edit, name: 'edit'},
+    // {path: '/edit/:entry_id', component: Edit, name: 'edit'},
     {path: '/delete/:entry_id', component: DeleteEntry, name: 'del-entry'},
     {path: '/delete', component: DeleteUser, name: 'del-account'},
   ]

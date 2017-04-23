@@ -37,8 +37,8 @@ type TokenUserPair struct {
 }
 
 type EntryPost struct {
-	Text			string			`bson:"text"`
-	Key				string			`bson:"key"`
+	Text			string			`bson:"text" json:"text"`
+	Key				string			`bson:"key" json:"key"`
 }
 
 type EntryEdit struct {
