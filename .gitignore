@@ -15,3 +15,7 @@
 
 # DS_Store
 *.DS_Store
+
+#RSA Files
+*.rsa
+*.rsa.pub

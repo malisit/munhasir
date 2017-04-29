@@ -75,27 +75,7 @@
 				</div>
 			</section>
 		</template>
-		<!-- <template id="view">
-			<section>
-				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
-				
-				<div v-if="token !== ''" v-if="err2 !== ''" v-html="text"></div>
-				<br>
-				<label v-if="err2 !== ''" for="search-element">Key</label>
-				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
-				<br>
-				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
-				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
-				<router-link class="btn btn-primary"  :to="{name: 'edit', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-edit"></span> Edit</router-link>
-				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'home'}"><span class="glyphicon glyphicon-home"></span> Home</router-link>
-				
-				<p v-if="err2 === ''">Invalid page, go back to Home?
-					<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
-				</p>
-				
-				
-			</section>
-		</template> -->
+		
 
 		<template id="del-entry">
 			<section>
@@ -110,8 +90,12 @@
 				<router-link class="btn btn-primary" :to="{name: 'home'}">Home</router-link>
 				
 				<br>
+				<br>
 				<div  v-if="status === 'deleted'"  class="alert alert-success">
 					success, directing to list.
+				</div>
+				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
+					{{status}}
 				</div>
 			</section>
 		</template>
@@ -178,17 +162,17 @@
 		<template id="view">
 			<section>
 
-				<h2 v-if="token !== ''" v-if="err2 !== ''">Edit</h2>
+				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
 				
-				<editor :model.sync="text">qwe</editor>
+				<editor :model.sync="text"></editor>
 				<br>
 				<label v-if="err2 !== ''" for="search-element">Key</label>
 				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
 				<br>
-				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-default">Decrypt</button>
-				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary">Update</button>
-				<router-link class="btn btn-default"  :to="{name: 'view', params: {entry_id: content.Id}}">Cancel</router-link>
-				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'home'}">Home</router-link>
+				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
+				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
+				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
+				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'home'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
 				<p v-if="err2 === ''">Invalid page, go back to Home?
 				<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'home'}">Home</router-link></p>
 				
@@ -281,7 +265,6 @@
 						<label for="text">Text</label>
 						<editor :model.sync="text"></editor>		
 					</div>
-					{{text}}
 					<div class="form-group">
 						<label for="key">Key</label>
 						<input class="form-control" id="key" v-model="key" required/>
@@ -303,7 +286,7 @@
 				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
 			</section>
 		</template>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>

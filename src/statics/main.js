@@ -20,7 +20,7 @@ var changePassword = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        this.status = response.body.substring(1,response.body.length-1);
+        this.status = response.body;
         this.oldPasswordTemp = this.oldPassword1;
         if (this.status == 'success') {
 
@@ -204,13 +204,16 @@ var DeleteEntry = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        res = response.body.substring(1,response.body.length-1);
-        console.log(res)
+        res = response.body;
         if (res=='success') {
           this.status = 'deleted'
           setTimeout(function(){ 
             router.push('/');  
           }, 3000);
+        } else if(res=='password is not true'){
+          this.status = res
+        } else {
+          this.status = 'everything is something happened'
         }
       })
     }
@@ -236,7 +239,7 @@ var DeleteUser = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        res = response.body.substring(1,response.body.length-1);
+        res = response.body;
         if (res=='success') {
           this.status = 'deleted'
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
@@ -264,7 +267,7 @@ var Home = Vue.extend({
         this.$http.get('/api/entry/list', {headers: {'Content-Type':'application/json', 'Authorization': 'Bearer '+getCookie("token")}}).then(response => {
 
         res = response.body;
-        console.log(res)
+        
         if (res == "this token is not authorized for this content") {
           
           document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC;";
@@ -330,14 +333,14 @@ var Register = Vue.extend({
       }).then(response => {
         res = response.body;
         this.oldUsername = json.username;
-        if (res=="\"success\""){
+        if (res=="success"){
           this.err = "success"
           this.isDisabled = true
           setTimeout(function(){ 
             router.push('/login');  
           }, 3000);
           
-        } else if (res=="\"already registered username\""){
+        } else if (res=="already registered username"){
           this.has_error = true;
           this.err = "alreadyuser"
 
@@ -395,12 +398,9 @@ var View = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        console.log(response)
         this.text = response.body;
         this.decrypted = true
         var markupStr = $('#summerasdnote').summernote('code');
-        console.log(markupStr)
-
 
       })
     },
@@ -415,7 +415,7 @@ var View = Vue.extend({
         'Authorization': 'Bearer '+getCookie("token")
         }
       }).then(response => {
-        this.status = response.body.substring(1,response.body.length-1)
+        this.status = response.body
 
         if (this.status == 'success') {
           setTimeout(function(){ 
@@ -468,7 +468,7 @@ var Login = Vue.extend({
           this.err = "success";
           this.userhas_error['has-error'] = false
           this.passhas_error['has-error'] = false
-          
+
           document.cookie = "token=" + res;
 
           // TODO:
@@ -520,7 +520,7 @@ var Post = Vue.extend({
       }).then(response => {
         res = response.body;
 
-        if (res=="\"success\""){
+        if (res=="success"){
           this.err = "success"
           this.isDisabled = true
           setTimeout(function(){ 
@@ -564,20 +564,6 @@ function getCookie(cname) {
     }
     return '';
 }
-
-
-// var isTokenValid = function(){
-//   token = "Bearer " + getFromLocalStorage("Token");
-//   console.log(token);
-//   var xhttp = new XMLHttpRequest();
-//   xhttp.open("GET", "/token", true);
-//   xhttp.setRequestHeader("Content-Type", "application/json");
-//   xhttp.setRequestHeader("Authorization", token);
-//   xhttp.send();
-//   xhttp.onload = function () {
-//     Token = this.responseText;
-//   };
-// }
 
 
 const router = new VueRouter({
