@@ -55,12 +55,6 @@ func main() {
 		negroni.Wrap(http.HandlerFunc(editHandler)),
 	))
 
-	// http.Handle("/api/token", negroni.New(
-	// 	negroni.HandlerFunc(ValidateTokenMiddleware),
-	// 	negroni.Wrap(http.HandlerFunc(isTokenValid)),
-	// ))
-
-	
 
 	if err := http.ListenAndServe(":"+port, nil);err != nil {
 		log.Fatal("ListenAndServe: ", err)

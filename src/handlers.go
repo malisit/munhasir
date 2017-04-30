@@ -109,10 +109,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// func isTokenValid(w http.ResponseWriter, r *http.Request) {
-// 	JsonResponse("valid",w)
-// }
-
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		JsonResponse("wrong method", w)
@@ -248,16 +244,6 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	if usr.Id == ent.User.Id {
 		JsonResponse(ent, w)
 	}
-	// hashedKey := hash(unhashedKey)
-	// decryptedText := decrypt(hashedKey, ent.EncryptedText)
-
-	// encryptedText := entry.Text
-	// unhashedKey := entry.Key
-
-	// hashedKey := hash(unhashedKey)
-	// decryptedText := decrypt(hashedKey, encryptedText)
-
-	
 	
 }
 

@@ -136,6 +136,28 @@ var summernoteComponent = {
     },
 }
 
+var Home = Vue.extend({
+  template: '#home',
+  data: function() {
+    return {
+      x: '',
+    }
+  },
+  methods: {
+
+  }
+})
+
+var jumboHeight = $('.jumbotron').outerHeight();
+function parallax(){
+    var scrolled = $(window).scrollTop();
+    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
+}
+
+$(window).scroll(function(e){
+    parallax();
+});
+
 // var View = Vue.extend({
 //   template: '#view',
 //   data: function () {
@@ -254,8 +276,8 @@ var DeleteUser = Vue.extend({
   }
 })
 
-var Home = Vue.extend({
-  template: '#home-list',
+var Dashboard = Vue.extend({
+  template: '#dashboard',
   data: function () {
     return {searchKey: '', data: [], key:'', text:''};
   },
@@ -569,12 +591,12 @@ function getCookie(cname) {
 const router = new VueRouter({
   routes: [
     {path: '/', component: Home, name:'home'},
+    {path: '/dashboard', component: Dashboard, name:'dashboard'},
     {path: '/post', component: Post, name:'post'},
     {path: '/register', component: Register, name: 'register'},
     {path: '/login', component: Login, name: 'login'},
     {path: '/change-password', component: changePassword, name: 'change-password'},
     {path: '/view/:entry_id', component: View, name: 'view'},
-    // {path: '/edit/:entry_id', component: Edit, name: 'edit'},
     {path: '/delete/:entry_id', component: DeleteEntry, name: 'del-entry'},
     {path: '/delete', component: DeleteUser, name: 'del-account'},
   ]

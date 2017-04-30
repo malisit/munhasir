@@ -5,7 +5,18 @@
 		<title>munhasir </title>
 		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
+		<style type="text/css">
+			#home-head {
+				background:url("bg1.jpg");
+				background-size: cover;
+				position: fixed;
+				width: 100%;
+				height: 350px;
+				left:0;
+				z-index: -1;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="container">
@@ -16,7 +27,22 @@
 			</header>
 			<main id="app"></main>
 		</div>
-		<template id="home-list">
+		<template id="home">
+		<div id="home-head">
+		
+		  <div class="section">
+		    <h1>Bootstrap Tutorial</h1> 
+		    <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing
+		    responsive, mobile-first projects on the web.</p> 
+		  </div>
+		  <p>This is some text.</p> 
+		  <p>This is another text.</p> 
+		</div>
+			
+
+		</template>
+
+		<template id="dashboard">
 			<section>
 				<div class="actions">
 					<router-link class="btn btn-default" :to="{name: 'post'}">
@@ -86,8 +112,8 @@
 				<button v-on:click="run" v-if="token !== ''" class="btn btn-primary">Delete</button>
 				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'view', params: {entry_id: entry_id}}">Cancel</router-link>
 				<p v-if="token === ''">Invalid page, go back to Home?
-				<router-link class="btn btn-warning" :to="{name: 'home'}">Home</router-link></p>
-				<router-link class="btn btn-primary" :to="{name: 'home'}">Home</router-link>
+				<router-link class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link></p>
+				<router-link class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
 				
 				<br>
 				<br>
@@ -111,9 +137,9 @@
 				</div>
 				<br>
 				<button v-on:click="run" v-if="token !== ''" class="btn btn-default">Delete</button>
-				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'home'}">Cancel</router-link>
+				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}">Cancel</router-link>
 				<p v-if="token === ''">Invalid page, go back to Home?</p>
-				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
 				<br>
 				<br>
 				<div  v-if="status === 'deleted'"  class="alert alert-success">
@@ -147,8 +173,8 @@
 				<br>
 
 				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-primary">Change</button>
-				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'home'}">Cancel</router-link>
-				<router-link v-if="token === ''" class="btn btn-primary" :to="{name: 'home'}">Home</router-link>
+				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
+				<router-link v-if="token === ''" class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
 				<br>
 				<br>
 				<div  v-if="status === 'success'"  class="alert alert-success">
@@ -172,9 +198,9 @@
 				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
 				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
 				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
-				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'home'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
+				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
 				<p v-if="err2 === ''">Invalid page, go back to Home?
-				<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'home'}">Home</router-link></p>
+				<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link></p>
 				
 				<div  v-if="status === 'success'"  class="alert alert-success">
 					success, directing to view.
@@ -209,7 +235,7 @@
 					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
 				</form>
 				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
-				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
 			</section>
 		</template>
 		<template id="login">
@@ -253,7 +279,7 @@
 					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
 				</form>
 				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
-				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'home'}">Home</router-link>
+				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
 			</section>
 		</template>
 		<template id="post">
