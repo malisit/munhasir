@@ -34,6 +34,14 @@ var changePassword = Vue.extend({
   }
 })
 
+function goToByScroll(){
+      // Reove "link" from the ID
+      // Scroll
+    $('html,body').animate({
+        scrollTop: $("#about").offset().top},
+        'slow');
+}
+
 
 var summernoteComponent = {
     replace: true,
@@ -137,26 +145,8 @@ var summernoteComponent = {
 }
 
 var Home = Vue.extend({
-  template: '#home',
-  data: function() {
-    return {
-      x: '',
-    }
-  },
-  methods: {
-
-  }
+  template: '#home'
 })
-
-var jumboHeight = $('.jumbotron').outerHeight();
-function parallax(){
-    var scrolled = $(window).scrollTop();
-    $('.bg').css('height', (jumboHeight-scrolled) + 'px');
-}
-
-$(window).scroll(function(e){
-    parallax();
-});
 
 // var View = Vue.extend({
 //   template: '#view',
@@ -230,7 +220,7 @@ var DeleteEntry = Vue.extend({
         if (res=='success') {
           this.status = 'deleted'
           setTimeout(function(){ 
-            router.push('/');  
+            router.push({ name: 'dashboard'});  
           }, 3000);
         } else if(res=='password is not true'){
           this.status = res
@@ -502,7 +492,7 @@ var Login = Vue.extend({
           
           this.isDisabled= false;
           setTimeout(function(){ 
-            router.push('/');  
+            router.push({ name: 'dashboard'});  
           }, 3000);
         }
       })
@@ -546,7 +536,7 @@ var Post = Vue.extend({
           this.err = "success"
           this.isDisabled = true
           setTimeout(function(){ 
-            router.push('/');  
+            router.push({ name: 'dashboard'});  
           }, 3000);
           
         } else {

@@ -4,46 +4,193 @@
 		<meta charset="UTF-8">
 		<title>munhasir </title>
 		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
-		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.4.0/css/font-awesome.css">
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
-		<style type="text/css">
-			#home-head {
-				background:url("bg1.jpg");
-				background-size: cover;
-				position: fixed;
-				width: 100%;
-				height: 350px;
-				left:0;
-				z-index: -1;
-			}
-		</style>
+		<link rel="stylesheet" type="text/css" href="style.css">
 	</head>
 	<body>
-		<div class="container">
-			<header class="page-header">
-				<div class="branding">
-					<h1>munhasir</h1>
-				</div>
-			</header>
-			<main id="app"></main>
-		</div>
+		<main id="app"></main>
 		<template id="home">
-		<div id="home-head">
-		
-		  <div class="section">
-		    <h1>Bootstrap Tutorial</h1> 
-		    <p>Bootstrap is the most popular HTML, CSS, and JS framework for developing
-		    responsive, mobile-first projects on the web.</p> 
-		  </div>
-		  <p>This is some text.</p> 
-		  <p>This is another text.</p> 
-		</div>
-			
+			<tag>
+				<header id="top" class="header">
+					<div class="text-vertical-center">
+						<img src="logo.png"  width="800" height="162">
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<h2 class="box_textshadow" style="color:white;">münhasır is a cloud based platform that enables users to write and keep encrypted diaries.</h2>
+						<br>
+						<button onclick="goToByScroll()" class="btn btn-primary btn-lg">Find Out More</button>
+						<br>
+						<br>
+						<br>
+						<div class="btn-group" role="group" aria-label="...">
+							<div class="btn-group" role="group">
+								<router-link class="btn btn-default btn-lg" :to="{name: 'login'}"><i class="fa fa-id-card" aria-hidden="true"></i> Login</router-link>
+							</div>
+							<div class="btn-group">
+								<router-link class="btn btn-default btn-lg" :to="{name: 'register'}" role="group"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</router-link>
+							</div>
+						</div>
+					</div>
+				</header>
+				<section id="about" class="about">
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-at" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							<div class="col-lg-6 text-center">
+								<h2>You don't need an email address. We won't know anything about you.</h2>
+								<p class="lead">You won't be able to recover your account when you forget your  <a href="register">password</a> though.</p>
+							</div>
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-6 text-center">
+								<h2>Millitary class encryption that depends on you.</h2>
+								<p class="lead">Encryption will be done with the  <a href="register">key</a> you specify and only you know.</p>
+							</div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-shield" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-key" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							<div class="col-lg-6 text-center">
+								<h2>It won't happen but, if we got hacked. Hackers won't get anything.</h2>
+								<p class="lead">Only thing that they can see on database is seem to be gibberish. Because they all will be <a href="register">encrypted.</a></p>
+							</div>
+							
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-6 text-center">
+								<h2>No admins, no moderators no one can ever see your posts. They are all yours.</h2>
+								<p class="lead">You won't be able to recover your account when you forget your  <a href="register">password</a> though.</p>
+							</div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-deaf" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-code" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							<div class="col-lg-6 text-center">
+								<h2>It's open source.</h2>
+								<p class="lead">You can see the code that powers <a href="https://github.com/malisit/munhasir">münhasır</a> yourself on GitHub.</p>
+							</div>
+							
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-6 text-center">
+								<h2>Great editor with lots of capabilities.</h2>
+								<p class="lead">You won't think about the  <a href="register">text editor</a> you use in your computer.</p>
+							</div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 15em"></i>
+							</div>
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-1"></div>
+							<div class="col-lg-4 text-center">
+								<i class="fa fa-money" aria-hidden="true"  style="font-size: 15em"></i>
+							</div>
+							<div class="col-lg-6 text-center">
+								<h2>...and above all, it's absolutely free.</h2>
+								<p class="lead">It will be <a href="register">free</a> forever.</p>
+							</div>
+							
+							
+							<div class="col-lg-1"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-2"></div>
+							<div class="col-lg-4 text-center">
+								<router-link class="btn btn-primary btn-huge" :to="{name: 'login'}">&nbsp; Login &nbsp;</router-link>
+							</div>
+							<div class="col-lg-4 text-center">
+								<router-link class="btn btn-primary btn-huge" :to="{name: 'register'}">Register</router-link>
+							</div>
+							
+							
+							<div class="col-lg-2"></div>
+						</div>
+						<!-- /.row -->
+					</div>
+					<br><br><br>
+					<div class="container">
+						<div class="row">
+							<div class="col-lg-2"></div>
+							<div class="col-lg-8 text-center">
+								<h1>Made with <i style="color:red;" class="fa fa-heart" aria-hidden="true"></i> in Iowa.</h1>
+							</div>
+							<div class="col-lg-2"></div>
+						</div>
+						<!-- /.row -->
+					</div>
 
+					<!-- /.container -->
+				</section>
+			</tag>
 		</template>
-
 		<template id="dashboard">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<div class="actions">
 					<router-link class="btn btn-default" :to="{name: 'post'}">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -54,14 +201,13 @@
 						Change Password
 					</router-link>
 					<button class="btn btn-default" v-on:click="logout">
-						<span class="glyphicon glyphicon-log-out"></span>
-						Logout
+					<span class="glyphicon glyphicon-log-out"></span>
+					Logout
 					</button>
 					<router-link class="btn btn-primary" :to="{name: 'del-account'}">
 						<span class="glyphicon glyphicon-trash"></span>
 						Delete Your Account
 					</router-link>
-
 				</div>
 				<div class="filters row">
 					<div class="form-group col-sm-3">
@@ -73,22 +219,20 @@
 					<thead>
 						<tr>
 							<th class="col-md-2">Date</th>
-							<th class="col-md-7">Content</th>
-							<th class="col-sm-3">Actions</th>
+							<th class="col-md-9">Content</th>
+							<th class="col-md-1">Actions</th>
 						</tr>
 					</thead>
 				</table>
 				<div v-for="entry in data2">
 					<div class="row">
 						<div class="col-md-2">{{ formatDateTime(entry.Day) }}</div>
-						<div class="col-md-7">
+						<div class="col-md-9">
 							<div style="word-wrap: break-word;">
 								<p>{{ entry.EncryptedText }}</p>
 							</div>
 						</div>
-						<div class="col-md-3">
-							<label>View</label>
-							<br>
+						<div class="col-md-1">
 							<router-link class="btn btn-primary"  :to="{name: 'view', params: {entry_id: entry.Id}}">
 								<span class="glyphicon glyphicon-eye-close"></span>
 							</router-link>
@@ -98,23 +242,27 @@
 					<br>
 					<br>
 				</div>
-				</div>
-			</section>
+			</div>
+			</div>
 		</template>
-		
-
 		<template id="del-entry">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token !== ''">Entry Delete</h2>
 				<label v-if="token !== ''">Password</label>
 				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
 				<br>
 				<button v-on:click="run" v-if="token !== ''" class="btn btn-primary">Delete</button>
 				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'view', params: {entry_id: entry_id}}">Cancel</router-link>
-				<p v-if="token === ''">Invalid page, go back to Home?
-				<router-link class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link></p>
+				<p v-if="token === ''">
+					Invalid page, go back to Home?
+					<router-link class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
+				</p>
 				<router-link class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
-				
 				<br>
 				<br>
 				<div  v-if="status === 'deleted'"  class="alert alert-success">
@@ -123,11 +271,15 @@
 				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
 					{{status}}
 				</div>
-			</section>
+			</div>
 		</template>
-
 		<template id="del-account">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token !== ''">Account Delete</h2>
 				<label v-if="token !== ''">Password</label>
 				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
@@ -148,30 +300,35 @@
 				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
 					{{status}}
 				</div>
-			</section>
+			</div>
 		</template>
-
 		<template id="change-password">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token !== ''">Change Password</h2>
 				<div class="form-group" v-bind:class="{'has-error':(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||(status !== 'success' && status !=='')}">
 					<label v-if="token !== ''" for="oldPassword1">Old Password</label>
 					<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
-				
-				<br>
-				<label v-if="token !== ''" for="oldPassword2">Old Password<p style="color:grey;">(Again)</p></label>
-				<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
-				
-				<br>
-				<div class="alert alert-danger" v-if="(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||((status !== 'success' && status !=='')&&oldPasswordTemp===oldPassword1)">
-				<span v-if="oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!=='')">passwords do not match</span><span v-if="(status !== 'success' && status !=='')&&(oldPasswordTemp===oldPassword1)"> {{status}}</span> </div>
+					<br>
+					<label v-if="token !== ''" for="oldPassword2">
+						Old Password
+						<p style="color:grey;">(Again)</p>
+					</label>
+					<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
+					<br>
+					<div class="alert alert-danger" v-if="(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||((status !== 'success' && status !=='')&&oldPasswordTemp===oldPassword1)">
+						<span v-if="oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!=='')">passwords do not match</span><span v-if="(status !== 'success' && status !=='')&&(oldPasswordTemp===oldPassword1)"> {{status}}</span> 
+					</div>
 				</div>
 				<div class="form-group">
-				<label v-if="token !== ''" for="newPassword">New Password</label>
-				<input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
+					<label v-if="token !== ''" for="newPassword">New Password</label>
+					<input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
 				</div>
 				<br>
-
 				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-primary">Change</button>
 				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
 				<router-link v-if="token === ''" class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
@@ -180,16 +337,16 @@
 				<div  v-if="status === 'success'"  class="alert alert-success">
 					success, please login with new password.
 				</div>
-				
-			</section>
+			</div>
 		</template>
-
-
 		<template id="view">
-			<section>
-
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
-				
 				<editor :model.sync="text"></editor>
 				<br>
 				<label v-if="err2 !== ''" for="search-element">Key</label>
@@ -199,16 +356,22 @@
 				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
 				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
 				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
-				<p v-if="err2 === ''">Invalid page, go back to Home?
-				<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link></p>
-				
+				<p v-if="err2 === ''">
+					Invalid page, go back to Home?
+					<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link>
+				</p>
 				<div  v-if="status === 'success'"  class="alert alert-success">
 					success, directing to view.
 				</div>
-			</section>
+			</div>
 		</template>
 		<template id="register">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token === ''">Register</h2>
 				<form v-on:submit.prevent v-if="token === ''" v-on:submit="createUser">
 					<div class="form-group" v-bind:class="{'has-error': has_error}">
@@ -236,10 +399,15 @@
 				</form>
 				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-			</section>
+			</div>
 		</template>
 		<template id="login">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token === ''">Login</h2>
 				<form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
 					<div class="form-group" v-bind:class="userhas_error">
@@ -263,11 +431,11 @@
 						</div>
 					</div>
 					<div class="form-group">
-					<div v-if="err === 'othererror'" >
-						<br>
-						<div class="alert alert-danger">
-							something unusual happened, please try again later.
-						</div>
+						<div v-if="err === 'othererror'" >
+							<br>
+							<div class="alert alert-danger">
+								something unusual happened, please try again later.
+							</div>
 						</div>
 						<div v-if="err === 'success'">
 							<br>
@@ -280,16 +448,20 @@
 				</form>
 				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-			</section>
+			</div>
 		</template>
 		<template id="post">
-			<section>
+			<div class="container">
+				<header class="page-header">
+					<div class="branding">
+						<img src="med.png" width="400" height="81">
+					</div>
+				</header>
 				<h2 v-if="token !== ''">Post New Entry</h2>
 				<form v-on:submit.prevent v-if="token !== ''" v-on:submit="postEntry">
-
 					<div class="form-group">
 						<label for="text">Text</label>
-						<editor :model.sync="text"></editor>		
+						<editor :model.sync="text"></editor>
 					</div>
 					<div class="form-group">
 						<label for="key">Key</label>
@@ -306,11 +478,11 @@
 						</div>
 					</div>
 					<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
-					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
 				</form>
 				<p v-if="token === ''">You should login first.</p>
 				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
-			</section>
+			</div>
 		</template>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
 		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -319,6 +491,5 @@
 		<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
 		<script src="main.js"></script>
-
 	</body>
 </html>
