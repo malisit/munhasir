@@ -180,19 +180,19 @@
 					</div>
 				</header>
 				<div class="actions">
-					<router-link class="btn btn-default" :to="{name: 'post'}">
+					<router-link class="btn btn-default col-xs-6 col-lg-3" :to="{name: 'post'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						New Entry
 					</router-link>
-					<router-link class="btn btn-primary" :to="{name: 'change-password'}">
+					<router-link class="btn btn-primary col-xs-6 col-lg-3" :to="{name: 'change-password'}">
 						<span class="glyphicon glyphicon-edit"></span>
 						Change Password
 					</router-link>
-					<button class="btn btn-default" v-on:click="logout">
+					<button class="btn btn-default col-xs-6 col-lg-3" v-on:click="logout">
 					<span class="glyphicon glyphicon-log-out"></span>
 					Logout
 					</button>
-					<router-link class="btn btn-primary" :to="{name: 'del-account'}">
+					<router-link class="btn btn-primary col-xs-6 col-lg-3" :to="{name: 'del-account'}">
 						<span class="glyphicon glyphicon-trash"></span>
 						Delete Your Account
 					</router-link>
@@ -200,28 +200,29 @@
 				<br>
 				<div class="filters row">
 					<div class="form-group col-sm-3">
-						<label for="search-element">Date Filter</label>
+						<label for="search-element">Date and Memo Filter</label>
 						<input v-model="searchKey" class="form-control" id="search-element" placeholder="10-06-1994 23:25" required/>
 					</div>
 				</div>
 				<table class="table">
 					<thead>
 						<tr>
-							<th class="col-md-2">Date</th>
-							<th class="col-md-9">Encrypted Text</th>
-							<th class="col-md-1">Actions</th>
+							<th class="col-md-2 col-sm-2 col-xs-2">Date</th>
+							<th class="col-md-9 col-sm-9 col-xs-8">Title/Memo</th>
+							<th class="col-md-1 col-sm-1 col-xs-2">Actions</th>
 						</tr>
 					</thead>
 				</table>
 				<div v-for="entry in data2">
 					<div class="row">
-						<div class="col-md-2">{{ formatDateTime(entry.Day) }}</div>
-						<div class="col-md-9">
+						<div class="col-md-2 col-sm-2 col-xs-2">{{ formatDateTime(entry.Day) }}</div>
+						<div class="col-md-9 col-sm-9 col-xs-8">
 							<div style="word-wrap: break-word;">
-								<p>{{ entry.EncryptedText }}</p>
+								<p v-if="entry.Title!==''">{{ entry.Title }}</p>
+								<p v-else>no title or memo</p>
 							</div>
 						</div>
-						<div class="col-md-1">
+						<div class="col-md-1 col-sm-1 col-xs-2">
 							<router-link title="Edit" class="btn btn-primary"  :to="{name: 'view', params: {entry_id: entry.Id}}">
 								<span class="glyphicon glyphicon-eye-close"></span>
 							</router-link>
@@ -336,6 +337,9 @@
 					</div>
 				</header>
 				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
+				
+				<input class="form-control" id="reminder" v-model="title"/>
+				<br>
 				<editor :model.sync="text"></editor>
 				<br>
 				<label v-if="err2 !== ''" for="search-element">Key</label>
@@ -345,12 +349,15 @@
 				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
 				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
 				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
+				<br>
+				<br>
 				<p v-if="err2 === ''">
 					Invalid page, go back to Home?
 					<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link>
 				</p>
+
 				<div  v-if="status === 'success'"  class="alert alert-success">
-					success, directing to view.
+					success, directing to dashboard.
 				</div>
 			</div>
 		</template>
@@ -448,6 +455,10 @@
 				</header>
 				<h2 v-if="token !== ''">Post New Entry</h2>
 				<form v-on:submit.prevent v-if="token !== ''" v-on:submit="postEntry">
+					<div class="form-group">
+						<label for="title">Title/Memo (Optional)</label>
+						<input class="form-control" id="reminder" v-model="title"/>
+					</div>
 					<div class="form-group">
 						<label for="text">Text</label>
 						<editor :model.sync="text"></editor>

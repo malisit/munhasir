@@ -160,18 +160,19 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
+	var postedJSON ThreeWayStruct
 
 	//decode request into UserCredentials struct
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		JsonResponse("error in request", w)
 		return
 	}
 
 
-	uncryptedText := entry.Text
-	unhashedKey := entry.Key
+	uncryptedText := postedJSON.One
+	unhashedKey := postedJSON.Two
+	titleOfEntry := postedJSON.Three
 
 	token := w.Header().Get("token")
 
@@ -189,7 +190,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	collection := session.DB("munhasir").C("entries")
 
-	newEntry := Entry{User:user, Day:createdAt, Updated:createdAt, EncryptedText:encryptedText}
+	newEntry := Entry{User:user, Title:titleOfEntry, Day:createdAt, Updated:createdAt, EncryptedText:encryptedText}
 	err = collection.Insert(newEntry)
 
 	if err != nil{
@@ -224,21 +225,21 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func entryHandler(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
+	var postedJSON OneWayStruct
 
 	//decode request into UserCredentials struct
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
 	}
 
-	entryId := entry.Text
-	//unhashedKey := entry.Key
+	entryId := postedJSON.One
+	
 	token := w.Header().Get("token")
 
-	usr:=getUserByToken(token)
+	usr := getUserByToken(token)
 	ent := getEntryById(entryId)
 
 	if usr.Id == ent.User.Id {
@@ -248,15 +249,15 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func decryptHandler(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	var postedJSON TwoWayStruct
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
 	}
-	encryptedText := entry.Text
-	unhashedKey := entry.Key
+	encryptedText := postedJSON.One
+	unhashedKey := postedJSON.Two
 
 	hashedKey := hash(unhashedKey)
 	decryptedText := decrypt(hashedKey, encryptedText)
@@ -269,16 +270,16 @@ func decryptHandler(w http.ResponseWriter, r *http.Request) {
 // the user for the posted token should be same
 // with the one that's binded into entry
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	var postedJSON TwoWayStruct
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
 	}	
 
-	entryId := entry.Text
-	pass := entry.Key
+	entryId := postedJSON.One
+	pass := postedJSON.Two
 
 	token := w.Header().Get("token")
 
@@ -314,17 +315,18 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 // the user for the posted token should be same
 // with the one that's binded into entry
 func editHandler(w http.ResponseWriter, r *http.Request) {
-	var entry EntryEdit
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	var postedJSON FourWayStruct
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
 	}	
 
-	newContent := entry.Text
-	entryId := entry.IdOfEntry
-	key := entry.Key
+	newContent := postedJSON.One
+	entryId := postedJSON.Two
+	key := postedJSON.Three
+	titleOfEntry := postedJSON.Four
 
 	token := w.Header().Get("token")
 
@@ -339,7 +341,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 		encryptedText := encrypt(hashedKey, newContent)
 
-		change := bson.M{"$set": bson.M{"encrypted_text": encryptedText, "updated": time.Now()}}
+		change := bson.M{"$set": bson.M{"encrypted_text": encryptedText, "title": titleOfEntry , "updated": time.Now()}}
 
 		session := connect()
 		defer session.Close()
@@ -360,8 +362,8 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 // get the user by the token and change its password
 // with the posted password
 func changePassword(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	var postedJSON TwoWayStruct
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
@@ -370,8 +372,8 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 	token := w.Header().Get("token")
 	usr := getUserByToken(token)
-	oldpass := entry.Text
-	newpass := entry.Key
+	oldpass := postedJSON.One
+	newpass := postedJSON.Two
 
 	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(oldpass))
 
@@ -405,8 +407,8 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 // get the user by the token and delete the user 
 func deleteUser(w http.ResponseWriter, r *http.Request) {
-	var entry EntryPost
-	err := json.NewDecoder(r.Body).Decode(&entry)
+	var postedJSON OneWayStruct
+	err := json.NewDecoder(r.Body).Decode(&postedJSON)
 	if err != nil {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
@@ -415,7 +417,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 
 	token := w.Header().Get("token")
 	usr := getUserByToken(token)
-	pass := entry.Text
+	pass := postedJSON.One
 	err = bcrypt.CompareHashAndPassword([]byte(usr.Password), []byte(pass))
 
 	if err != nil {

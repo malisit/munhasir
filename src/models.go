@@ -6,23 +6,24 @@ import (
 )
 
 type Day struct {
-	Id			int64			`bson:"id"`
+	Id				int64			`bson:"id"`
 	DayDate			time.Time		`bson:"day_date"`
 }
 
 type User struct {
-	Id			bson.ObjectId		`bson:"_id,omitempty"`
+	Id				bson.ObjectId	`bson:"_id,omitempty"`
 	Username		string			`bson:"username"`
 	Password		string			`bson:"password"`
 	Datetime		time.Time		`bson:"registration_datetime"`
 }
 
 type Entry struct {
-	Id			bson.ObjectId		`bson:"_id,omitempty"`
+	Id				bson.ObjectId	`bson:"_id,omitempty"`
 	User			User			`bson:"user"`
-	Day			time.Time		`bson:"day"`
-	Updated		time.Time		`bson:"updated"`
-	EncryptedText		string			`bson:"encrypted_text"`
+	Title			string			`bson:"title"`
+	Day				time.Time		`bson:"day"`
+	Updated			time.Time		`bson:"updated"`
+	EncryptedText	string			`bson:"encrypted_text"`
 }
 
 type UserCredentials struct {
@@ -36,13 +37,24 @@ type TokenUserPair struct {
 	Timestamp		time.Time		`bson:"timestamp"`
 }
 
-type EntryPost struct {
-	Text			string			`bson:"text" json:"text"`
-	Key				string			`bson:"key" json:"key"`
+type OneWayStruct struct {
+	One 			string			`json:"one"`
 }
 
-type EntryEdit struct {
-	Text			string			`bson:"text"`
-	IdOfEntry		string			`bson:"idof" json:"idof"`
-	Key				string			`bson:"key"`
+type TwoWayStruct struct {
+	One 			string			`json:"one"`
+	Two 			string			`json:"two"`
+}
+
+type ThreeWayStruct struct {
+	One 			string			`json:"one"`
+	Two 			string			`json:"two"`
+	Three 			string			`json:"three"`
+}
+
+type FourWayStruct struct {
+	One 			string			`json:"one"`
+	Two 			string			`json:"two"`
+	Three 			string			`json:"three"`
+	Four 			string			`json:"four"`
 }
