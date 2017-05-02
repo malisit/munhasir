@@ -148,54 +148,6 @@ var Home = Vue.extend({
   template: '#home'
 })
 
-// var View = Vue.extend({
-//   template: '#view',
-//   data: function () {
-//     return {
-//         err: '',
-//         isDisabled: false,
-//         token: getCookie("token"),
-//         content: '',
-//         text: '',
-//         decrypted: false,
-//         err2: '',
-//         pass: ''
-//         // entryId: this.$route.query.entry_id
-//     }
-//   },
-//   created: function () {
-//     this.fetchData();
-//   },
-//   methods: {
-//     fetchData: function() {
-//       var json = {"text":this.$route.params.entry_id, "key":""}
-      
-//       this.$http.post('/api/entry/view', json, {
-//         headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer '+getCookie("token")
-//         }
-//       }).then(response => {
-//         this.content = response.body;
-//         this.err2 = this.content.type
-//         this.text = this.content.EncryptedText
-//       })
-//     },
-//     decrypt: function() {
-//       key = this.$refs[this.content.Id].value;
-//       var json = {"text":this.content.EncryptedText, "key":key}
-//       this.$http.post('/api/entry/decrypt', json, {
-//         headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': 'Bearer '+getCookie("token")
-//         }
-//       }).then(response => {
-//         this.text = response.body.substring(1,response.body.length-1);
-//       })
-//     },
-    
-//   }
-// })
 
 var DeleteEntry = Vue.extend({
   template: '#del-entry',
@@ -296,7 +248,7 @@ var Dashboard = Vue.extend({
       formatDateTime: function(datetime) {
           d = new Date(datetime)
   
-  var datestring = ("0" + d.getDate()).slice(-2) + "-" + ("0"+(d.getMonth()+1)).slice(-2) + "-" +
+  var datestring = ("0"+(d.getMonth()+1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2) + "-" +
     d.getFullYear() + " " + ("0" + d.getHours()).slice(-2) + ":" + ("0" + d.getMinutes()).slice(-2);
 
   return datestring;
