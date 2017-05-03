@@ -8,6 +8,10 @@ body {
     font-family: "Source Sans Pro","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+.topmenu {
+  border-radius: 0 !important;
+}
+
 .text-vertical-center {
     display: table-cell;
     text-align: center;

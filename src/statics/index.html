@@ -2,7 +2,8 @@
 <html >
 	<head>
 		<meta charset="UTF-8">
-		<title>munhasir </title>
+		<title>munhasir - a cloud based platform to keep encrypted diaries</title>
+		<meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
 		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
 		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
@@ -60,7 +61,7 @@
 						<div class="row">
 							<div class="col-lg-1"></div>
 							<div class="col-lg-6 text-center">
-								<h2>Millitary class encryption that depends on you.</h2>
+								<h2>Military class encryption that depends on you.</h2>
 								<p class="lead">Encryption will be done with the  <router-link  :to="{name: 'register'}">key</router-link> you specify and only you know.</p>
 							</div>
 							<div class="col-lg-4 text-center">
@@ -180,26 +181,27 @@
 					</div>
 				</header>
 				<div class="actions">
-					<router-link class="btn btn-default col-xs-6 col-lg-3" :to="{name: 'post'}">
+					<router-link class="btn btn-default col-xs-6 col-lg-3 topmenu" :to="{name: 'post'}">
 						<span class="glyphicon glyphicon-plus"></span>
 						New Entry
 					</router-link>
-					<router-link class="btn btn-primary col-xs-6 col-lg-3" :to="{name: 'change-password'}">
+					<router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'change-password'}">
 						<span class="glyphicon glyphicon-edit"></span>
 						Change Password
 					</router-link>
-					<button class="btn btn-default col-xs-6 col-lg-3" v-on:click="logout">
+					<button class="btn btn-default col-xs-6 col-lg-3 topmenu" v-on:click="logout">
 					<span class="glyphicon glyphicon-log-out"></span>
 					Logout
 					</button>
-					<router-link class="btn btn-primary col-xs-6 col-lg-3" :to="{name: 'del-account'}">
+					<router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'del-account'}">
 						<span class="glyphicon glyphicon-trash"></span>
 						Delete Your Account
 					</router-link>
 				</div>
-				<br>
+
 				<div class="filters row">
 					<div class="form-group col-sm-3">
+						<br>
 						<label for="search-element">Date and Memo Filter</label>
 						<input v-model="searchKey" class="form-control" id="search-element" placeholder="10-06-1994 23:25" required/>
 					</div>
