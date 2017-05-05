@@ -1,3 +1,8 @@
+Date.prototype.addHours= function(h){
+    this.setHours(this.getHours()+h);
+    return this;
+}
+
 var changePassword = Vue.extend({
     template: '#change-password',
     data: function() {
@@ -483,14 +488,10 @@ var Login = Vue.extend({
                     this.userhas_error['has-error'] = false
                     this.passhas_error['has-error'] = false
 
-                    document.cookie = "token=" + res;
+                    var expireDate = new Date().addHours(1)
+          
+                    document.cookie = "token=" + res + ";" + " expires=" + expireDate.toUTCString() +  "";
 
-                    // TODO:
-                    // need to implement expiration date for cookie
-                    // document.cookie = "token=" + res.substring(1, res.length-1) + "; expires=" + date +  "";
-
-
-                    //saveToLocalStorage("Token",res.substring(1, res.length-1));
 
                     this.isDisabled = false;
                     setTimeout(function() {

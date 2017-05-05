@@ -7,6 +7,7 @@ import (
 	"time"
 	"log"
 	"fmt"
+	"strings"
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
@@ -19,6 +20,19 @@ func checkInternalServerError(err error, w http.ResponseWriter) {
 		return
 	}
 }
+
+func directToHttps(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
+	if r.URL.Scheme == "https" || strings.HasPrefix(r.Proto, "HTTPS") || r.Header.Get("X-Forwarded-Proto") == "https" {
+		next(w, r)
+	} else {
+		next(w, r)
+		target := "https://" + r.Host + r.URL.Path 
+		
+		http.Redirect(w, r, target,
+            http.StatusTemporaryRedirect)
+	}
+}
+
 
 var (
 	VerifyKey *rsa.PublicKey

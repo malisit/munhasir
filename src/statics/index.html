@@ -14,18 +14,18 @@
 		<br><br><br>
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-2"></div>
-				<div class="col-lg-8 text-center">
+				<div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
+				<div class="col-lg-8 col-sm-12 col-md-12 col-xs-12 text-center">
 					<h1>Made with <i style="color:red;" class="fa fa-heart" aria-hidden="true"></i>.</h1>
 				</div>
-				<div class="col-lg-2"></div>
+				<div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
 			</div>
 		</div>
 		<template id="home">
 			<tag>
 				<header id="top" class="header">
-					<div class="text-vertical-center">
-						<img src="logo.png"  width="800" height="162">
+					<div class="text-vertical-center col-xs-12">
+						<img style="width:80%;height:auto;" src="logo.png">
 						<br><br><br><br><br><br><br>
 						<h2 class="box_textshadow" style="color:white;">münhasır is a cloud based platform that enables users to write and keep encrypted diaries.</h2>
 						<br>
@@ -401,49 +401,57 @@
 		</template>
 		<template id="login">
 			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
+				<div class="row">
+					<div class="col-xs-12">
+						<header class="page-header">
+							<div class="branding">
+								<img style="max-width: 100%;" src="med.png" width="375" height="76">
+							</div>
+						</header>
 					</div>
-				</header>
+				</div>
 				<h2 v-if="token === ''">Login</h2>
-				<form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
-					<div class="form-group" v-bind:class="userhas_error">
-						<label for="username">Username</label>
-						<input id="username" class="form-control" v-model="user.username" required/>
-						<div v-if="err === 'doesn\'t exist'" >
-							<br>
-							<div class="alert alert-danger">
-								username doesn't seem to be registered, sorry.
+				<div class="row">
+					<div class="col-xs-12">
+					<form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
+						<div class="form-group" v-bind:class="userhas_error">
+							<label for="username">Username</label>
+							<input id="username" class="form-control" v-model="user.username" required/>
+							<div v-if="err === 'doesn\'t exist'" >
+								<br>
+								<div class="alert alert-danger">
+									username doesn't seem to be registered, sorry.
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="form-group" v-bind:class="passhas_error">
-						<label for="password">Password</label>
-						<input type="password" class="form-control" id="password" v-model="user.password" required/>
-						<div v-if="err === 'incorrectpass'">
-							<br> 
-							<div class="alert alert-danger">
-								incorrect password
+						<div class="form-group" v-bind:class="passhas_error">
+							<label for="password">Password</label>
+							<input type="password" class="form-control" id="password" v-model="user.password" required/>
+							<div v-if="err === 'incorrectpass'">
+								<br> 
+								<div class="alert alert-danger">
+									incorrect password
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="form-group">
-						<div v-if="err === 'othererror'" >
-							<br>
-							<div class="alert alert-danger">
-								something unusual happened, please try again later.
+						<div class="form-group">
+							<div v-if="err === 'othererror'" >
+								<br>
+								<div class="alert alert-danger">
+									something unusual happened, please try again later.
+								</div>
+							</div>
+							<div v-if="err === 'success'">
+								<br>
+								<div  class="alert alert-success">logged in, directing to your entries.</div>
 							</div>
 						</div>
-						<div v-if="err === 'success'">
-							<br>
-							<div  class="alert alert-success">logged in, directing to your entries.</div>
-						</div>
+						<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
+						<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+						<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
+					</form>
 					</div>
-					<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
-					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
-					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
-				</form>
+				</div>
 				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
 				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
 			</div>

@@ -46,7 +46,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	claims := make(jwt.MapClaims)
 	//set claims
 	claims["iss"] = "admin"
-	claims["exp"] = time.Now().Add(time.Minute * 20).Unix()
+	claims["exp"] = time.Now().Add(time.Minute * 60).Unix()
 	claims["CustomUserInfo"] = struct {
 		Name	string
 		Role	string
