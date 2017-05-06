@@ -1,15 +1,15 @@
 package main
 
 import (
-	"net/http"
-	"html/template"
-	"time"
+	"encoding/json"
 	"fmt"
-	"log"
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 	"gopkg.in/mgo.v2/bson"
-	"encoding/json"
-	"github.com/dgrijalva/jwt-go"
+	"html/template"
+	"log"
+	"net/http"
+	"time"
 )
 
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -27,8 +27,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 	result := User{}
 	collection := session.DB("munhasir").C("users")
-	err = collection.Find(bson.M{"username":user.Username}).One(&result)
-	if err != nil{
+	err = collection.Find(bson.M{"username": user.Username}).One(&result)
+	if err != nil {
 		JsonResponse("user doesn't exist", w)
 		return
 	}
@@ -40,7 +40,6 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	//create a rsa 256 signer
 	signer := jwt.New(jwt.GetSigningMethod("RS256"))
 	claims := make(jwt.MapClaims)
@@ -48,8 +47,8 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	claims["iss"] = "admin"
 	claims["exp"] = time.Now().Add(time.Minute * 60).Unix()
 	claims["CustomUserInfo"] = struct {
-		Name	string
-		Role	string
+		Name string
+		Role string
 	}{user.Username, "Member"}
 	signer.Claims = claims
 	tokenString, err := signer.SignedString(SignKey)
@@ -63,17 +62,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	// create a user-token pair
 
 	collection = session.DB("munhasir").C("usertoken")
-	newPair := TokenUserPair{User:result, Token:tokenString, Timestamp: bson.Now()}
+	newPair := TokenUserPair{User: result, Token: tokenString, Timestamp: bson.Now()}
 	err = collection.Insert(newPair)
 
-	if err != nil{
-		http.Error(w, "everything is something happened: " + err.Error(), http.StatusBadRequest)
+	if err != nil {
+		http.Error(w, "everything is something happened: "+err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	// return token string
 	JsonResponse(tokenString, w)
-
 
 }
 
@@ -86,7 +84,6 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 		"titleF": func() string {
 			return "munhasir"
 		},
-
 	}
 
 	template, err := template.New("index.html").Funcs(funcMap).ParseFiles("templates/index.html")
@@ -134,9 +131,9 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	result := User{}
 
-	err = collection.Find(bson.M{"username":username}).Select(bson.M{"username":username}).One(&result)
+	err = collection.Find(bson.M{"username": username}).Select(bson.M{"username": username}).One(&result)
 
-	if err == nil{
+	if err == nil {
 		JsonResponse("already registered username", w)
 		return
 	}
@@ -147,17 +144,15 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 
 	checkInternalServerError(err, w)
 
-	newUser := User{Username:username, Password:string(hashedPassword), Datetime:createdAt}
+	newUser := User{Username: username, Password: string(hashedPassword), Datetime: createdAt}
 	err = collection.Insert(newUser)
 
-	if err != nil{
+	if err != nil {
 		JsonResponse("db error", w)
 		return
 	}
 	JsonResponse("success", w)
 }
-
-
 
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON ThreeWayStruct
@@ -168,7 +163,6 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 		JsonResponse("error in request", w)
 		return
 	}
-
 
 	uncryptedText := postedJSON.One
 	unhashedKey := postedJSON.Two
@@ -190,16 +184,15 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 
 	collection := session.DB("munhasir").C("entries")
 
-	newEntry := Entry{User:user, Title:titleOfEntry, Day:createdAt, Updated:createdAt, EncryptedText:encryptedText}
+	newEntry := Entry{User: user, Title: titleOfEntry, Day: createdAt, Updated: createdAt, EncryptedText: encryptedText}
 	err = collection.Insert(newEntry)
 
-	if err != nil{
-		JsonResponse("db error",w)
+	if err != nil {
+		JsonResponse("db error", w)
 		return
 	}
 	JsonResponse("success", w)
 }
-
 
 func listHandler(w http.ResponseWriter, r *http.Request) {
 
@@ -214,13 +207,13 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 	defer session.Close()
 
 	collection := session.DB("munhasir").C("entries")
-	err := collection.Find(bson.M{"user._id":user.Id}).Sort("-day").All(&results)
+	err := collection.Find(bson.M{"user._id": user.Id}).Sort("-day").All(&results)
 
-	if err != nil{
-		http.Error(w, "error: " + err.Error(), http.StatusBadRequest)
+	if err != nil {
+		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	
+
 	JsonResponse(results, w)
 }
 
@@ -236,7 +229,7 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	entryId := postedJSON.One
-	
+
 	token := w.Header().Get("token")
 
 	usr := getUserByToken(token)
@@ -245,7 +238,7 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 	if usr.Id == ent.User.Id {
 		JsonResponse(ent, w)
 	}
-	
+
 }
 
 func decryptHandler(w http.ResponseWriter, r *http.Request) {
@@ -265,7 +258,6 @@ func decryptHandler(w http.ResponseWriter, r *http.Request) {
 	JsonResponse(decryptedText, w)
 }
 
-
 // delete the entry with posted id
 // the user for the posted token should be same
 // with the one that's binded into entry
@@ -276,7 +268,7 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
-	}	
+	}
 
 	entryId := postedJSON.One
 	pass := postedJSON.Two
@@ -321,7 +313,7 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
-	}	
+	}
 
 	newContent := postedJSON.One
 	entryId := postedJSON.Two
@@ -334,14 +326,14 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 	ent := getEntryById(entryId)
 
 	if usr.Id == ent.User.Id {
-		
+
 		getById := bson.M{"_id": ent.Id}
-	
+
 		hashedKey := hash(key)
 
 		encryptedText := encrypt(hashedKey, newContent)
 
-		change := bson.M{"$set": bson.M{"encrypted_text": encryptedText, "title": titleOfEntry , "updated": time.Now()}}
+		change := bson.M{"$set": bson.M{"encrypted_text": encryptedText, "title": titleOfEntry, "updated": time.Now()}}
 
 		session := connect()
 		defer session.Close()
@@ -358,7 +350,6 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
 // get the user by the token and change its password
 // with the posted password
 func changePassword(w http.ResponseWriter, r *http.Request) {
@@ -368,7 +359,7 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
-	}	
+	}
 
 	token := w.Header().Get("token")
 	usr := getUserByToken(token)
@@ -381,7 +372,6 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 		JsonResponse("password is not true", w)
 		return
 	}
-
 
 	getById := bson.M{"_id": usr.Id}
 
@@ -405,7 +395,7 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// get the user by the token and delete the user 
+// get the user by the token and delete the user
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 	var postedJSON OneWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
@@ -413,7 +403,7 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusForbidden)
 		fmt.Fprintf(w, "Error in request")
 		return
-	}	
+	}
 
 	token := w.Header().Get("token")
 	usr := getUserByToken(token)
@@ -424,7 +414,6 @@ func deleteUser(w http.ResponseWriter, r *http.Request) {
 		JsonResponse("password is not true", w)
 		return
 	}
-
 
 	getById := bson.M{"_id": usr.Id}
 

@@ -1,11 +1,10 @@
 package main
 
 import (
+	"github.com/codegangsta/negroni"
 	"log"
 	"net/http"
 	"os"
-	"github.com/codegangsta/negroni"
-	//"gopkg.in/mgo.v2/bson"
 )
 
 func main() {
@@ -16,7 +15,7 @@ func main() {
 		log.Fatal("$PORT must be set")
 	}
 
-	// route
+	// routes
 	http.Handle("/", negroni.New(
 		negroni.HandlerFunc(directToHttps),
 		negroni.Wrap(http.StripPrefix("", http.FileServer(http.Dir("./statics")))),
@@ -70,10 +69,7 @@ func main() {
 		negroni.Wrap(http.HandlerFunc(editHandler)),
 	))
 
-
-	if err := http.ListenAndServe(":"+port, nil);err != nil {
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
 }
-
-

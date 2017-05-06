@@ -1,17 +1,17 @@
 package main
 
 import (
-	"net/http"
 	"crypto/rsa"
-	"io/ioutil"
-	"time"
-	"log"
-	"fmt"
-	"strings"
 	"encoding/json"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/dgrijalva/jwt-go/request"
 	"gopkg.in/mgo.v2/bson"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"strings"
+	"time"
 )
 
 func checkInternalServerError(err error, w http.ResponseWriter) {
@@ -26,21 +26,19 @@ func directToHttps(w http.ResponseWriter, r *http.Request, next http.HandlerFunc
 		next(w, r)
 	} else {
 		next(w, r)
-		target := "https://" + r.Host + r.URL.Path 
-		
+		target := "https://" + r.Host + r.URL.Path
+
 		http.Redirect(w, r, target,
-            http.StatusTemporaryRedirect)
+			http.StatusTemporaryRedirect)
 	}
 }
 
-
 var (
 	VerifyKey *rsa.PublicKey
-	SignKey *rsa.PrivateKey
+	SignKey   *rsa.PrivateKey
 )
 
-
-func initRSAKeys(){
+func initRSAKeys() {
 	signBytes, err := ioutil.ReadFile("app.rsa")
 
 	SignKey, err = jwt.ParseRSAPrivateKeyFromPEM(signBytes)
@@ -49,7 +47,6 @@ func initRSAKeys(){
 		log.Fatal("Error reading private key")
 		return
 	}
-
 
 	verifyBytes, err := ioutil.ReadFile("app.rsa.pub")
 
@@ -72,29 +69,27 @@ func JsonResponse(response interface{}, w http.ResponseWriter) {
 	// }
 
 	w.WriteHeader(http.StatusOK)
-	
-	
+
 	enc.Encode(response)
 }
 
 func ValidateTokenMiddleware(w http.ResponseWriter, r *http.Request, next http.HandlerFunc) {
 
 	//validate token
-	token, err := request.ParseFromRequest(r, request.OAuth2Extractor, func(token *jwt.Token) (interface{}, error){
+	token, err := request.ParseFromRequest(r, request.OAuth2Extractor, func(token *jwt.Token) (interface{}, error) {
 		return VerifyKey, nil
 	})
 
-
 	if err == nil {
-		if token.Valid{
-			w.Header().Set("token",token.Raw)
+		if token.Valid {
+			w.Header().Set("token", token.Raw)
 			next(w, r)
 		} else {
-			JsonResponse("this token is not a real token",w)
+			JsonResponse("this token is not a real token", w)
 			return
 		}
 	} else {
-		JsonResponse("this token is not authorized for this content",w)
+		JsonResponse("this token is not authorized for this content", w)
 		return
 	}
 
@@ -107,10 +102,10 @@ func getUserByToken(token string) User {
 	defer session.Close()
 
 	end := bson.Now()
-	start := end.Add(-20*time.Minute)
+	start := end.Add(-20 * time.Minute)
 
 	collection := session.DB("munhasir").C("usertoken")
-	err := collection.Find(bson.M{"timestamp": bson.M{"$gte": start, "$lte": end}, "token":token}).One(&result)
+	err := collection.Find(bson.M{"timestamp": bson.M{"$gte": start, "$lte": end}, "token": token}).One(&result)
 
 	if err != nil {
 		fmt.Println("there is no user token pair for given token")
@@ -125,9 +120,9 @@ func getEntryById(id string) Entry {
 	collection := session.DB("munhasir").C("entries")
 
 	result := Entry{}
-	err := collection.Find(bson.M{"_id":bson.ObjectIdHex(id)}).One(&result)
+	err := collection.Find(bson.M{"_id": bson.ObjectIdHex(id)}).One(&result)
 
-	if err != nil{
+	if err != nil {
 		return Entry{}
 	} else {
 		return result

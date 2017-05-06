@@ -1,13 +1,13 @@
 package main
 
 import (
-	"crypto/sha256"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
-	"io"
 	"fmt"
+	"io"
 )
 
 //
