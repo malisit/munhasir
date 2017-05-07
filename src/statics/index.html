@@ -1,505 +1,518 @@
 <!DOCTYPE html>
-<html >
-	<head>
-		<meta charset="UTF-8">
-		<title>munhasir - a cloud based platform to keep encrypted diaries</title>
-		<meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
-		<link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
-		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
-		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
-		<link rel="stylesheet" type="text/css" href="style.css">
-	</head>
-	<body>
-		<main id="app"></main>
-		<br><br><br>
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
-				<div class="col-lg-8 col-sm-12 col-md-12 col-xs-12 text-center">
-					<h1>Made with <i style="color:red;" class="fa fa-heart" aria-hidden="true"></i>.</h1>
-				</div>
-				<div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
-			</div>
-		</div>
-		<template id="home">
-			<tag>
-				<header id="top" class="header">
-					<div class="text-vertical-center col-xs-12">
-						<img style="width:80%;height:auto;" src="logo.png">
-						<br><br><br><br><br><br><br>
-						<h2 class="box_textshadow" style="color:white;">münhasır is a cloud based platform that enables users to write and keep encrypted diaries.</h2>
-						<br>
-						<button onclick="goToByScroll()" class="btn btn-primary btn-lg">Find Out More</button>
-						<br><br><br>
-						<div class="btn-group" role="group" aria-label="...">
-							<div class="btn-group" role="group">
-								<router-link class="btn btn-default btn-lg" :to="{name: 'login'}"><i class="fa fa-id-card" aria-hidden="true"></i> Login</router-link>
-							</div>
-							<div class="btn-group">
-								<router-link class="btn btn-default btn-lg" :to="{name: 'register'}" role="group"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</router-link>
-							</div>
-						</div>
-					</div>
-				</header>
-				<section id="about" class="about">
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-at" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							<div class="col-lg-6 text-center">
-								<h2>You don't need an email address. We won't know anything about you.</h2>
-								<p class="lead">You won't be able to recover your account when you forget your  <router-link  :to="{name: 'register'}">password</router-link> though.</p>
-							</div>
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-6 text-center">
-								<h2>Military class encryption that depends on you.</h2>
-								<p class="lead">Encryption will be done with the  <router-link  :to="{name: 'register'}">key</router-link> you specify and only you know.</p>
-							</div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-shield" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-key" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							<div class="col-lg-6 text-center">
-								<h2>It won't happen but, if we got hacked. Hackers won't get anything.</h2>
-								<p class="lead">Only thing that they can see on database is seem to be gibberish. Because they all will be <router-link  :to="{name: 'register'}">encrypted.</router-link></p>
-							</div>
-							
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-6 text-center">
-								<h2>No admins, no moderators no one can ever see your posts. They are all yours.</h2>
-								<p class="lead">You won't be able to recover your account when you forget your  <router-link  :to="{name: 'register'}">password</router-link> though.</p>
-							</div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-deaf" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-code" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							<div class="col-lg-6 text-center">
-								<h2>It's open source.</h2>
-								<p class="lead">You can see the code that powers <a href="https://github.com/malisit/munhasir">münhasır</a> yourself on GitHub.</p>
-							</div>
-							
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-6 text-center">
-								<h2>Great editor with lots of capabilities.</h2>
-								<p class="lead">You won't think about the  <router-link  :to="{name: 'register'}">text editor</router-link> you use in your computer.</p>
-							</div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 15em"></i>
-							</div>
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-1"></div>
-							<div class="col-lg-4 text-center">
-								<i class="fa fa-money" aria-hidden="true"  style="font-size: 15em"></i>
-							</div>
-							<div class="col-lg-6 text-center">
-								<h2>...and above all, it's absolutely free.</h2>
-								<p class="lead">It will be <router-link  :to="{name: 'register'}">free</router-link> forever.</p>
-							</div>
-							
-							
-							<div class="col-lg-1"></div>
-						</div>
-						<!-- /.row -->
-					</div>
-					<br><br><br>
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-2"></div>
-							<div class="col-lg-4 text-center">
-								<router-link class="btn btn-primary btn-huge" :to="{name: 'login'}">&nbsp; Login &nbsp;</router-link>
-							</div>
-							<div class="col-lg-4 text-center">
-								<router-link class="btn btn-primary btn-huge" :to="{name: 'register'}">Register</router-link>
-							</div>
-							
-							
-							<div class="col-lg-2"></div>
-						</div>
-					</div>
-				</section>
-			</tag>
-		</template>
-		<template id="dashboard">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<div class="actions">
-					<router-link class="btn btn-default col-xs-6 col-lg-3 topmenu" :to="{name: 'post'}">
-						<span class="glyphicon glyphicon-plus"></span>
-						New Entry
-					</router-link>
-					<router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'change-password'}">
-						<span class="glyphicon glyphicon-edit"></span>
-						Change Password
-					</router-link>
-					<button class="btn btn-default col-xs-6 col-lg-3 topmenu" v-on:click="logout">
-					<span class="glyphicon glyphicon-log-out"></span>
-					Logout
-					</button>
-					<router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'del-account'}">
-						<span class="glyphicon glyphicon-trash"></span>
-						Delete Your Account
-					</router-link>
-				</div>
-
-				<div class="filters row">
-					<div class="form-group col-sm-3">
-						<br>
-						<label for="search-element">Date and Memo Filter</label>
-						<input v-model="searchKey" class="form-control" id="search-element" placeholder="10-06-1994 23:25" required/>
-					</div>
-				</div>
-				<table class="table">
-					<thead>
-						<tr>
-							<th class="col-md-2 col-sm-2 col-xs-2">Date</th>
-							<th class="col-md-9 col-sm-9 col-xs-8">Title/Memo</th>
-							<th class="col-md-1 col-sm-1 col-xs-2">Actions</th>
-						</tr>
-					</thead>
-				</table>
-				<div v-for="entry in data2">
-					<div class="row">
-						<div class="col-md-2 col-sm-2 col-xs-2">{{ formatDateTime(entry.Day) }}</div>
-						<div class="col-md-9 col-sm-9 col-xs-8">
-							<div style="word-wrap: break-word;">
-								<p v-if="entry.Title!==''">{{ entry.Title }}</p>
-								<p v-else>no title or memo</p>
-							</div>
-						</div>
-						<div class="col-md-1 col-sm-1 col-xs-2">
-							<router-link title="Edit" class="btn btn-primary"  :to="{name: 'view', params: {entry_id: entry.Id}}">
-								<span class="glyphicon glyphicon-eye-close"></span>
-							</router-link>
-						</div>
-						<br>
-					</div>
-					<br>
-					<br>
-				</div>
-			</div>
-			</div>
-		</template>
-		<template id="del-entry">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token !== ''">Entry Delete</h2>
-				<label v-if="token !== ''">Password</label>
-				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
-				<br>
-				<button v-on:click="run" v-if="token !== ''" class="btn btn-primary">Delete</button>
-				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'view', params: {entry_id: entry_id}}">Cancel</router-link>
-				<p v-if="token === ''">
-					Invalid page, go back to Home?
-					<router-link class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-				</p>
-				<router-link class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
-				<br>
-				<br>
-				<div  v-if="status === 'deleted'"  class="alert alert-success">
-					success, directing to list.
-				</div>
-				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
-					{{status}}
-				</div>
-			</div>
-		</template>
-		<template id="del-account">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token !== ''">Account Delete</h2>
-				<label v-if="token !== ''">Password</label>
-				<input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
-				<br>
-				<div class="alert alert-warning">
-					are you sure? we won't ask again!
-				</div>
-				<br>
-				<button v-on:click="run" v-if="token !== ''" class="btn btn-default">Delete</button>
-				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}">Cancel</router-link>
-				<p v-if="token === ''">Invalid page, go back to Home?</p>
-				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-				<br>
-				<br>
-				<div  v-if="status === 'deleted'"  class="alert alert-success">
-					success, you are no longer a member.
-				</div>
-				<div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
-					{{status}}
-				</div>
-			</div>
-		</template>
-		<template id="change-password">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token !== ''">Change Password</h2>
-				<div class="form-group" v-bind:class="{'has-error':(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||(status !== 'success' && status !=='')}">
-					<label v-if="token !== ''" for="oldPassword1">Old Password</label>
-					<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
-					<br>
-					<label v-if="token !== ''" for="oldPassword2">
-						Old Password
-						<p style="color:grey;">(Again)</p>
-					</label>
-					<input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
-					<br>
-					<div class="alert alert-danger" v-if="(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||((status !== 'success' && status !=='')&&oldPasswordTemp===oldPassword1)">
-						<span v-if="oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!=='')">passwords do not match</span><span v-if="(status !== 'success' && status !=='')&&(oldPasswordTemp===oldPassword1)"> {{status}}</span> 
-					</div>
-				</div>
-				<div class="form-group">
-					<label v-if="token !== ''" for="newPassword">New Password</label>
-					<input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
-				</div>
-				<br>
-				<button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-primary">Change</button>
-				<router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
-				<router-link v-if="token === ''" class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
-				<br>
-				<br>
-				<div  v-if="status === 'success'"  class="alert alert-success">
-					success, please login with new password.
-				</div>
-			</div>
-		</template>
-		<template id="view">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
-				
-				<input class="form-control" id="reminder" v-model="title"/>
-				<br>
-				<editor :model.sync="text"></editor>
-				<br>
-				<label v-if="err2 !== ''" for="search-element">Key</label>
-				<input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
-				<br>
-				<button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
-				<button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
-				<router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
-				<router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
-				<br>
-				<br>
-				<p v-if="err2 === ''">
-					Invalid page, go back to Home?
-					<router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link>
-				</p>
-
-				<div  v-if="status === 'success'"  class="alert alert-success">
-					success, directing to dashboard.
-				</div>
-			</div>
-		</template>
-		<template id="register">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token === ''">Register</h2>
-				<form v-on:submit.prevent v-if="token === ''" v-on:submit="createUser">
-					<div class="form-group" v-bind:class="{'has-error': has_error}">
-						<label for="add-username">Username</label>
-						<input id="add-username" class="form-control" v-model="user.username" required/>
-						<div v-if="err === 'alreadyuser' && oldUsername==user.username">
-							<br>
-							<div class="alert alert-danger">
-								username is taken. sorry about that. maybe try another one?
-							</div>
-						</div>
-					</div>
-					<div class="form-group">
-						<label for="add-password">Password</label>
-						<input type="password" class="form-control" id="add-password" v-model="user.password" required/>
-						<div v-if="err === 'success'">
-							<br>
-							<div class="alert alert-success">
-								success, directing to login.
-							</div>
-						</div>
-					</div>
-					<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Create</button>
-					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
-				</form>
-				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
-				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-			</div>
-		</template>
-		<template id="login">
-			<div class="container">
-				<div class="row">
-					<div class="col-xs-12">
-						<header class="page-header">
-							<div class="branding">
-								<img style="max-width: 100%;" src="med.png" width="375" height="76">
-							</div>
-						</header>
-					</div>
-				</div>
-				<h2 v-if="token === ''">Login</h2>
-				<div class="row">
-					<div class="col-xs-12">
-					<form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
-						<div class="form-group" v-bind:class="userhas_error">
-							<label for="username">Username</label>
-							<input id="username" class="form-control" v-model="user.username" required/>
-							<div v-if="err === 'doesn\'t exist'" >
-								<br>
-								<div class="alert alert-danger">
-									username doesn't seem to be registered, sorry.
-								</div>
-							</div>
-						</div>
-						<div class="form-group" v-bind:class="passhas_error">
-							<label for="password">Password</label>
-							<input type="password" class="form-control" id="password" v-model="user.password" required/>
-							<div v-if="err === 'incorrectpass'">
-								<br> 
-								<div class="alert alert-danger">
-									incorrect password
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<div v-if="err === 'othererror'" >
-								<br>
-								<div class="alert alert-danger">
-									something unusual happened, please try again later.
-								</div>
-							</div>
-							<div v-if="err === 'success'">
-								<br>
-								<div  class="alert alert-success">logged in, directing to your entries.</div>
-							</div>
-						</div>
-						<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
-						<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
-						<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
-					</form>
-					</div>
-				</div>
-				<p v-if="token !== ''">You already logged in. You can go back to home page.</p>
-				<router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
-			</div>
-		</template>
-		<template id="post">
-			<div class="container">
-				<header class="page-header">
-					<div class="branding">
-						<img src="med.png" width="400" height="81">
-					</div>
-				</header>
-				<h2 v-if="token !== ''">Post New Entry</h2>
-				<form v-on:submit.prevent v-if="token !== ''" v-on:submit="postEntry">
-					<div class="form-group">
-						<label for="title">Title/Memo (Optional)</label>
-						<input class="form-control" id="reminder" v-model="title"/>
-					</div>
-					<div class="form-group">
-						<label for="text">Text</label>
-						<editor :model.sync="text"></editor>
-					</div>
-					<div class="form-group">
-						<label for="key">Key</label>
-						<input class="form-control" id="key" v-model="key" required/>
-						<div>
-							<br>
-							<div class="alert alert-warning">
-								You will need to remember this key to see or edit this entry afterwards.
-							</div>
-						</div>
-						<div v-if="err === 'success'">
-							<br>
-							<div  class="alert alert-success">posted the new entry. directing to the entry list.</div>
-						</div>
-					</div>
-					<button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
-					<router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
-				</form>
-				<p v-if="token === ''">You should login first.</p>
-				<router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
-			</div>
-		</template>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-		<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
-		<script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
-		<script src="main.js"></script>
-	</body>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>munhasir - a cloud based platform to keep encrypted diaries</title>
+        <meta name="description" content="münhasır is a cloud based platform that enables users to write and keep military class encrypted diaries."/>
+        <link rel='stylesheet prefetch' href='https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/simplex/bootstrap.min.css'>
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+        <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/summernote/0.8.3/summernote.css">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <body>
+        <main id="app"></main>
+        <br><br><br>
+        <div class="container container2">
+            <div class="row">
+                <div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
+                <div class="col-lg-8 col-sm-12 col-md-12 col-xs-12 text-center">
+                    <h1>Made with <i style="color:red;" class="fa fa-heart" aria-hidden="true"></i>.</h1>
+                </div>
+                <div class="col-lg-2 col-sm-0 col-md-0 col-xs-0"></div>
+            </div>
+        </div>
+        <template id="home">
+            <div>
+                <header id="top" class="header">
+                    <br><br><br>
+                    <div class="text-vertical-center col-lg-12">
+                        <br><br><br>
+                        <img style="max-width:80%;height:auto;" src="logo.png">
+                        <br><br><br><br><br><br><br>
+                        <h2 class="box_textshadow" style="color:white;">münhasır is a cloud based platform that enables users to write and keep encrypted diaries.</h2>
+                        <br>
+                        <button onclick="goToByScroll()" class="btn btn-primary btn-lg">Find Out More</button>
+                        <br><br><br>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <div class="btn-group" role="group">
+                                <router-link class="btn btn-default btn-lg" :to="{name: 'login'}"><i class="fa fa-id-card" aria-hidden="true"></i> Login</router-link>
+                            </div>
+                            <div class="btn-group">
+                                <router-link class="btn btn-default btn-lg" :to="{name: 'register'}" role="group"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</router-link>
+                            </div>
+                        </div>
+                        <br><br>
+                    </div>
+                </header>
+                <section id="about" class="about">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-at" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <h2>You don't need an email address. We won't know anything about you.</h2>
+                                <p class="lead">
+                                    You won't be able to recover your account when you forget your  
+                                    <router-link  :to="{name: 'register'}">password</router-link>
+                                    though.
+                                </p>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6 text-center">
+                                <h2>Military class encryption that depends on you.</h2>
+                                <p class="lead">
+                                    Encryption will be done with the  
+                                    <router-link  :to="{name: 'register'}">key</router-link>
+                                    you specify and only you know.
+                                </p>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-shield" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-key" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <h2>It won't happen but, if we got hacked. Hackers won't get anything.</h2>
+                                <p class="lead">
+                                    Only thing that they can see on database is seem to be gibberish. Because they all will be 
+                                    <router-link  :to="{name: 'register'}">encrypted.</router-link>
+                                </p>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6 text-center">
+                                <h2>No admins, no moderators no one can ever see your posts. They are all yours.</h2>
+                                <p class="lead">
+                                    You won't be able to recover your account when you forget your  
+                                    <router-link  :to="{name: 'register'}">password</router-link>
+                                    though.
+                                </p>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-deaf" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-code" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <h2>It's open source.</h2>
+                                <p class="lead">You can see the code that powers <a href="https://github.com/malisit/munhasir">münhasır</a> yourself on GitHub.</p>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-6 text-center">
+                                <h2>Great editor with lots of capabilities.</h2>
+                                <p class="lead">
+                                    You won't think about the  
+                                    <router-link  :to="{name: 'register'}">text editor</router-link>
+                                    you use in your computer.
+                                </p>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-pencil-square-o" aria-hidden="true" style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-1"></div>
+                            <div class="col-lg-4 text-center">
+                                <i class="fa fa-money" aria-hidden="true"  style="font-size: 15em"></i>
+                            </div>
+                            <div class="col-lg-6 text-center">
+                                <h2>...and above all, it's absolutely free.</h2>
+                                <p class="lead">
+                                    It will be 
+                                    <router-link  :to="{name: 'register'}">free</router-link>
+                                    forever.
+                                </p>
+                            </div>
+                            <div class="col-lg-1"></div>
+                        </div>
+                        <!-- /.row -->
+                    </div>
+                    <br><br><br>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-2"></div>
+                            <div class="col-lg-4 text-center">
+                                <router-link class="btn btn-primary btn-huge" :to="{name: 'login'}">&nbsp; Login &nbsp;</router-link>
+                            </div>
+                            <div class="col-lg-4 text-center">
+                                <router-link class="btn btn-primary btn-huge" :to="{name: 'register'}">Register</router-link>
+                            </div>
+                            <div class="col-lg-2"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </template>
+        <template id="dashboard">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width:100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <div class="actions">
+                    <router-link class="btn btn-default col-xs-6 col-lg-3 topmenu" :to="{name: 'post'}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        New Entry
+                    </router-link>
+                    <router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'change-password'}">
+                        <span class="glyphicon glyphicon-edit"></span>
+                        Change Password
+                    </router-link>
+                    <button class="btn btn-default col-xs-6 col-lg-3 topmenu" v-on:click="logout">
+                    <span class="glyphicon glyphicon-log-out"></span>
+                    Logout
+                    </button>
+                    <router-link class="btn btn-primary col-xs-6 col-lg-3 topmenu" :to="{name: 'del-account'}">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Delete Your Account
+                    </router-link>
+                </div>
+                <div class="filters row">
+                    <div class="form-group col-sm-3">
+                        <br>
+                        <label for="search-element">Date and Memo Filter</label>
+                        <input v-model="searchKey" class="form-control" id="search-element" placeholder="10-06-1994 23:25" required/>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-2 col-sm-2 col-xs-2">Date</th>
+                            <th class="col-md-9 col-sm-9 col-xs-8">Title/Memo</th>
+                            <th class="col-md-1 col-sm-1 col-xs-2">View</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div v-for="entry in data2">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 col-xs-2">{{ formatDateTime(entry.Day) }}</div>
+                        <div class="col-md-9 col-sm-9 col-xs-8">
+                            <div style="word-wrap: break-word;">
+                                <p v-if="entry.Title!==''">{{ entry.Title }}</p>
+                                <p v-else>no title or memo</p>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1 col-xs-2">
+                            <router-link title="View/Edit" class="btn btn-primary"  :to="{name: 'view', params: {entry_id: entry.Id}}">
+                                <span class="glyphicon glyphicon-eye-close"></span>
+                            </router-link>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                    <br>
+                </div>
+            </div>
+            </div>
+        </template>
+        <template id="del-entry">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token !== ''">Entry Delete</h2>
+                <label v-if="token !== ''">Password</label>
+                <input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
+                <br>
+                <button v-on:click="run" v-if="token !== ''" class="btn btn-primary">Delete</button>
+                <router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'view', params: {entry_id: entry_id}}">Cancel</router-link>
+                <p v-if="token === ''">
+                    Invalid page, go back to Home?
+                    <router-link class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
+                </p>
+                <router-link class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
+                <br>
+                <br>
+                <div  v-if="status === 'deleted'"  class="alert alert-success">
+                    success, directing to list.
+                </div>
+                <div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
+                    {{status}}
+                </div>
+            </div>
+        </template>
+        <template id="del-account">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token !== ''">Account Delete</h2>
+                <label v-if="token !== ''">Password</label>
+                <input type="password" v-if="token !== ''" v-model="pass" class="form-control" required/>
+                <br>
+                <div class="alert alert-warning">
+                    are you sure? we won't ask again!
+                </div>
+                <br>
+                <button v-on:click="run" v-if="token !== ''" class="btn btn-default">Delete</button>
+                <router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}">Cancel</router-link>
+                <p v-if="token === ''">Invalid page, go back to Home?</p>
+                <router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
+                <br>
+                <br>
+                <div  v-if="status === 'deleted'"  class="alert alert-success">
+                    success, you are no longer a member.
+                </div>
+                <div  v-if="status !== '' && status !== 'deleted'"  class="alert alert-danger">
+                    {{status}}
+                </div>
+            </div>
+        </template>
+        <template id="change-password">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token !== ''">Change Password</h2>
+                <div class="form-group" v-bind:class="{'has-error':(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||(status !== 'success' && status !=='')}">
+                    <label v-if="token !== ''" for="oldPassword1">Old Password</label>
+                    <input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword1" required/>
+                    <br>
+                    <label v-if="token !== ''" for="oldPassword2">
+                        Old Password
+                        <p style="color:grey;">(Again)</p>
+                    </label>
+                    <input type="password" v-if="token !== ''" class="form-control" v-model="oldPassword2" required/>
+                    <br>
+                    <div class="alert alert-danger" v-if="(oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!==''))||((status !== 'success' && status !=='')&&oldPasswordTemp===oldPassword1)">
+                        <span v-if="oldPassword1!==oldPassword2 &&  (oldPassword1!=='' && oldPassword2!=='')">passwords do not match</span><span v-if="(status !== 'success' && status !=='')&&(oldPasswordTemp===oldPassword1)"> {{status}}</span> 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label v-if="token !== ''" for="newPassword">New Password</label>
+                    <input type="password" v-if="token !== ''" class="form-control" v-model="newPassword" required/>
+                </div>
+                <br>
+                <button v-if="token !== ''" v-on:click="post" v-bind:class="{ 'disabled': oldPassword1!==oldPassword2 || oldPassword1==='' || oldPassword2===''}" class="btn btn-primary">Change</button>
+                <router-link v-if="token !== ''" class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
+                <router-link v-if="token === ''" class="btn btn-primary" :to="{name: 'dashboard'}">Home</router-link>
+                <br>
+                <br>
+                <div  v-if="status === 'success'"  class="alert alert-success">
+                    success, please login with new password.
+                </div>
+            </div>
+        </template>
+        <template id="view">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token !== ''" v-if="err2 !== ''">View</h2>
+                <input class="form-control" id="reminder" v-model="title"/>
+                <br>
+                <editor :model.sync="text"></editor>
+                <br>
+                <label v-if="err2 !== ''" for="search-element">Key</label>
+                <input v-if="err2 !== ''" v-bind:ref="content.Id" class="form-control" required/>
+                <br>
+                <button v-if="err2 !== ''" v-on:click="decrypt" v-if="token !== ''" class="btn btn-default"><span class="glyphicon glyphicon-eye-open"></span> Decrypt</button>
+                <button v-if="err2 !== ''" v-bind:class="{ 'disabled': !decrypted }"  v-on:click="update" v-if="token !== ''" class="btn btn-primary"><span class="glyphicon glyphicon-edit"></span> Update</button>
+                <router-link v-if="err2 !== ''" v-if="token !== ''" class="btn btn-default" :to="{name: 'del-entry', params: {entry_id: content.Id}}"><span class="glyphicon glyphicon-trash"></span> Delete</router-link>
+                <router-link v-if="token !== ''" class="btn btn-primary" :to="{name: 'dashboard'}"><span class="glyphicon glyphicon-home"></span> Cancel</router-link>
+                <br>
+                <br>
+                <p v-if="err2 === ''">
+                    Invalid page, go back to Home?
+                    <router-link v-if="token === ''" class="btn btn-danger" :to="{name: 'dashboard'}">Home</router-link>
+                </p>
+                <div  v-if="status === 'success'"  class="alert alert-success">
+                    success, directing to dashboard.
+                </div>
+            </div>
+        </template>
+        <template id="register">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token === ''">Register</h2>
+                <form v-on:submit.prevent v-if="token === ''" v-on:submit="createUser">
+                    <div class="form-group" v-bind:class="{'has-error': has_error}">
+                        <label for="add-username">Username</label>
+                        <input id="add-username" class="form-control" v-model="user.username" required/>
+                        <div v-if="err === 'alreadyuser' && oldUsername==user.username">
+                            <br>
+                            <div class="alert alert-danger">
+                                username is taken. sorry about that. maybe try another one?
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-password">Password</label>
+                        <input type="password" class="form-control" id="add-password" v-model="user.password" required/>
+                        <div v-if="err === 'success'">
+                            <br>
+                            <div class="alert alert-success">
+                                success, directing to login.
+                            </div>
+                        </div>
+                    </div>
+                    <button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Create</button>
+                    <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+                </form>
+                <p v-if="token !== ''">You already logged in. You can go back to home page.</p>
+                <router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
+            </div>
+        </template>
+        <template id="login">
+            <div class="container container2">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <header class="page-header">
+                            <div class="branding">
+                                <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                            </div>
+                        </header>
+                        <h2 v-if="token === ''">Login</h2>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form v-on:submit.prevent v-if="token === ''" v-on:submit="logInUser">
+                            <div class="form-group" v-bind:class="userhas_error">
+                                <label for="username">Username</label>
+                                <input id="username" class="form-control" v-model="user.username" required/>
+                                <div v-if="err === 'doesn\'t exist'" >
+                                    <br>
+                                    <div class="alert alert-danger">
+                                        username doesn't seem to be registered, sorry.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" v-bind:class="passhas_error">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" v-model="user.password" required/>
+                                <div v-if="err === 'incorrectpass'">
+                                    <br> 
+                                    <div class="alert alert-danger">
+                                        incorrect password
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div v-if="err === 'othererror'" >
+                                    <br>
+                                    <div class="alert alert-danger">
+                                        something unusual happened, please try again later.
+                                    </div>
+                                </div>
+                                <div v-if="err === 'success'">
+                                    <br>
+                                    <div  class="alert alert-success">logged in, directing to your entries.</div>
+                                </div>
+                            </div>
+                            <button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
+                            <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{path: '/'}">Cancel</router-link>
+                            <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'register'}">Register</router-link>
+                        </form>
+                    </div>
+                    <p v-if="token !== ''">You already logged in. You can go back to home page.</p>
+                    <router-link v-if="token !== ''" class="btn btn-warning" :to="{name: 'dashboard'}">Home</router-link>
+                </div>
+            </div>
+        </template>
+        <template id="post">
+            <div class="container container2">
+                <header class="page-header">
+                    <div class="branding">
+                        <img style="max-width: 100%;" src="med.png" width="350" height="71">
+                    </div>
+                </header>
+                <h2 v-if="token !== ''">Post New Entry</h2>
+                <form v-on:submit.prevent v-if="token !== ''" v-on:submit="postEntry">
+                    <div class="form-group">
+                        <label for="title">Title/Memo (Optional)</label>
+                        <input class="form-control" id="reminder" v-model="title"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="text">Text</label>
+                        <editor :model.sync="text"></editor>
+                    </div>
+                    <div class="form-group">
+                        <label for="key">Key</label>
+                        <input class="form-control" id="key" v-model="key" required/>
+                        <div>
+                            <br>
+                            <div class="alert alert-warning">
+                                You will need to remember this key to see or edit this entry afterwards.
+                            </div>
+                        </div>
+                        <div v-if="err === 'success'">
+                            <br>
+                            <div  class="alert alert-success">posted the new entry. directing to the entry list.</div>
+                        </div>
+                    </div>
+                    <button v-bind:class="{ 'disabled': isDisabled }" type="submit" class="btn btn-primary">Submit</button>
+                    <router-link v-bind:class="{ 'disabled': isDisabled }"  class="btn btn-default" :to="{name: 'dashboard'}">Cancel</router-link>
+                </form>
+                <p v-if="token === ''">You should login first.</p>
+                <router-link v-if="token === ''" class="btn btn-warning" :to="{name: 'login'}">Login</router-link>
+            </div>
+        </template>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.6/vue.min.js'></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/vue-router/2.3.1/vue-router.min.js'></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.2.1/vue-resource.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.3/summernote.min.js"></script>
+        <script src="main.js"></script>
+    </body>
 </html>

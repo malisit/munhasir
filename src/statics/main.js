@@ -43,8 +43,6 @@ var changePassword = Vue.extend({
 })
 
 function goToByScroll() {
-    // Reove "link" from the ID
-    // Scroll
     $('html,body').animate({
             scrollTop: $("#about").offset().top
         },

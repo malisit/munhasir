@@ -32,14 +32,12 @@ body {
     position: relative;
     width: 100%;
     height: 100%;
-    background: url(alb3.jpg) no-repeat center center scroll;
+    background: url(bg.jpg) no-repeat center center scroll;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
 }
-
-/* About */
 
 .about {
     padding: 50px 0;
@@ -52,4 +50,32 @@ body {
     -webkit-border-radius: 8px;
        -moz-border-radius: 8px;
             border-radius: 8px;
+}
+
+.header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+}
+
+
+@media (min-width: 768px) {
+  .container2 {
+    max-width: 730px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .header {
+    padding-right: 0;
+    padding-left: 0;
+    margin-bottom: 30px;
+  }
 }
