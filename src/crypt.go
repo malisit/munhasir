@@ -14,6 +14,11 @@ import (
 // https://gist.github.com/manishtpatel/8222606
 //
 
+
+// AES expects a byte slice with 32 elements as key and I wanted to enable
+// users to have any set of characters as keys. Decided to go with hashing
+// them. This function basically hashes any given string to []byte with length
+// of 32 and returns it.
 func hash(str string) []byte {
 	h := sha256.New()
 	io.WriteString(h, str)
@@ -22,7 +27,7 @@ func hash(str string) []byte {
 	return key
 }
 
-// encrypt string to base64 crypto using AES
+// Encrypts string to base64 crypto using AES. Used to store entries encrypted.
 func encrypt(key []byte, text string) string {
 	// key := []byte(keyText)
 	plaintext := []byte(text)
@@ -47,7 +52,7 @@ func encrypt(key []byte, text string) string {
 	return base64.URLEncoding.EncodeToString(ciphertext)
 }
 
-// decrypt from base64 to decrypted string
+// Decrypts from base64 to decrypted string. Stored entries are decrypted by this function.
 func decrypt(key []byte, cryptoText string) string {
 	ciphertext, _ := base64.URLEncoding.DecodeString(cryptoText)
 
