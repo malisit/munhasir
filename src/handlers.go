@@ -12,6 +12,10 @@ import (
 	"time"
 )
 
+// Login Handler Function
+// Gets posted username and password. If the user is registered
+// and the password is correct, it sends response with json web token,
+// logins and directs to dashboard.
 func loginHandler(w http.ResponseWriter, r *http.Request) {
 	var user UserCredentials
 
@@ -75,7 +79,9 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-
+// Register Handler Function
+// Gets posted username and password. If the username is not registered
+// before, registers user and directs to login page.
 func registerHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
 		JsonResponse("wrong method", w)
@@ -124,6 +130,7 @@ func registerHandler(w http.ResponseWriter, r *http.Request) {
 	JsonResponse("success", w)
 }
 
+// Gets posted entry, encrypts it with the provided key and saves to DB.
 func postHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON ThreeWayStruct
 
@@ -164,6 +171,7 @@ func postHandler(w http.ResponseWriter, r *http.Request) {
 	JsonResponse("success", w)
 }
 
+// Sorts and returns all encrypted entries posted by user.
 func listHandler(w http.ResponseWriter, r *http.Request) {
 
 	token := w.Header().Get("token")
@@ -187,6 +195,7 @@ func listHandler(w http.ResponseWriter, r *http.Request) {
 	JsonResponse(results, w)
 }
 
+// Returns specified entry.
 func entryHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON OneWayStruct
 
@@ -211,6 +220,7 @@ func entryHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Decrypts posted text with posted key.
 func decryptHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON TwoWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
@@ -228,9 +238,10 @@ func decryptHandler(w http.ResponseWriter, r *http.Request) {
 	JsonResponse(decryptedText, w)
 }
 
-// delete the entry with posted id
-// the user for the posted token should be same
-// with the one that's binded into entry
+// Deletes the entry with posted id.
+// The user for the posted token should be same
+// with the one that's binded into entry and since
+// keys are not stored in DB, this is verified with password.
 func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON TwoWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
@@ -272,10 +283,11 @@ func deleteHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// edit the entry with posted id
-// replace the content with posted content after encrypt
-// the user for the posted token should be same
-// with the one that's binded into entry
+// Edits the entry with posted id.
+// Replace the content with posted content after encryption.
+// The user for the posted token should be same
+// with the one that's binded into entry. Stored tokens are
+// used to compare to verify.
 func editHandler(w http.ResponseWriter, r *http.Request) {
 	var postedJSON FourWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
@@ -320,8 +332,8 @@ func editHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// get the user by the token and change its password
-// with the posted password
+// Gets the user by the token and change its password.
+// Old password is verified before changing to new one.
 func changePassword(w http.ResponseWriter, r *http.Request) {
 	var postedJSON TwoWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
@@ -365,7 +377,7 @@ func changePassword(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// get the user by the token and delete the user
+// Gets the user by the token and delete the user if posted password is true.
 func deleteUser(w http.ResponseWriter, r *http.Request) {
 	var postedJSON OneWayStruct
 	err := json.NewDecoder(r.Body).Decode(&postedJSON)
