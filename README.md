@@ -1,3 +1,3 @@
 # munhasir  
-A platform to keeping diaries for those who are cautious(or paranoid).  
+A platform for keeping diaries for those who are cautious(or paranoid).  
 
